@@ -1,0 +1,7 @@
+C:\Users\Rachel\Documents\Visual Studio 2017\Projects\Assign1\Assign1\bin\Debug\Assign1.exe.config
+C:\Users\Rachel\Documents\Visual Studio 2017\Projects\Assign1\Assign1\bin\Debug\Assign1.exe
+C:\Users\Rachel\Documents\Visual Studio 2017\Projects\Assign1\Assign1\bin\Debug\Assign1.pdb
+C:\Users\Rachel\Documents\Visual Studio 2017\Projects\Assign1\Assign1\obj\Debug\Assign1.csprojResolveAssemblyReference.cache
+C:\Users\Rachel\Documents\Visual Studio 2017\Projects\Assign1\Assign1\obj\Debug\Assign1.csproj.CoreCompileInputs.cache
+C:\Users\Rachel\Documents\Visual Studio 2017\Projects\Assign1\Assign1\obj\Debug\Assign1.exe
+C:\Users\Rachel\Documents\Visual Studio 2017\Projects\Assign1\Assign1\obj\Debug\Assign1.pdb
