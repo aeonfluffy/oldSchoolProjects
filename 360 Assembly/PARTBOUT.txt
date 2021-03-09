@@ -1,0 +1,85 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 23.39.40 JOB06995 ---- FRIDAY,    09 SEP 2016 ----
+ 23.39.40 JOB06995  IRR010I  USERID KC03PE7  IS ASSIGNED TO THIS JOB.
+ 23.39.40 JOB06995  ICH70001I KC03PE7  LAST ACCESS AT 23:38:05 ON FRIDAY, SEPTEMBER 9, 2016
+ 23.39.40 JOB06995  $HASP373 KC03PE7B STARTED - INIT 2    - CLASS A        - SYS S0W1
+ 23.39.40 JOB06995  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 23.39.40 JOB06995  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 23.39.40 JOB06995  -KC03PE7B                      00     37 ******    .00     .0     83   0      0      0      0     0
+ 23.39.40 JOB06995  -KC03PE7B ENDED.  NAME-RACHEL BASTUK        TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 23.39.40 JOB06995  $HASP395 KC03PE7B ENDED
+0------ JES2 JOB STATISTICS ------
+-  09 SEP 2016 JOB EXECUTION DATE
+-           30 CARDS READ
+-           85 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-            7 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03PE7B JOB ,'RACHEL BASTUK',MSGCLASS=H                              JOB06995
+         2 //STEP1 EXEC PGM=ASSIST                                                 00020011
+         3 //STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030011
+         4 //SYSPRINT DD SYSOUT=*                                                  00040011
+         5 //SYSIN DD *                                                            00050011
+ ICH70001I KC03PE7  LAST ACCESS AT 23:38:05 ON FRIDAY, SEPTEMBER 9, 2016
+ IEF236I ALLOC. FOR KC03PE7B STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IEF142I KC03PE7B STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03PE7.KC03PE7B.JOB06995.D0000102.?         SYSOUT        
+ IEF285I   KC03PE7.KC03PE7B.JOB06995.D0000101.?         SYSIN         
+ IEF373I STEP/STEP1   /START 2016253.2339
+ IEF032I STEP/STEP1   /STOP  2016253.2339 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   268K  EXT:        0K  SYS:    11496K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03PE7B/START 2016253.2339
+ IEF033I  JOB/KC03PE7B/STOP  2016253.2339 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 *************************                                               00051017         
+                                       2 *NAME: RACHEL BASTUK                                                    00052017         
+                                       3 *                                                                       00053017         
+                                       4 *ASSIGNMENT 2                                                           00054017         
+                                       5 *                                                                       00055017         
+                                       6 *ADDING, SUBTRACTING, LOADING                                           00056017         
+                                       7 *WITHOUT LABELS/EXPLICIT                                                00057017         
+                                       8 ***************************                                             00058017         
+ 000000                                9 ASSN2    CSECT                                                          00060015         
+ 000000                               10          USING ASSN2,15                                                 00070015         
+ 000000 581F 0028            00028    11          L     1,40(15)                                                 00080015         
+ 000004 582F 002C            0002C    12          L     2,44(15)                                                 00090015         
+ 000008 1B21                          13          SR    2,1         SUBTRACT REGISTERS                           00100018         
+ 00000A 502F 0030            00030    14          ST    2,48(15)    STORE DIFFERENCE                             00101018         
+ 00000E 582F 002C            0002C    15          L     2,44(15)                                                 00102015         
+ 000012 1A12                          16          AR    1,2         ADD REGISTERS                                00103018         
+ 000014 501F 0034            00034    17          ST    1,52(15)    STORE SUM                                    00104018         
+ 000018 E06F 0034 0008 00034          18          XDUMP 52(15),8                                                 00105015         
+ 00001E E160 0000 0000 00000          19          XDUMP                                                          00110011         
+ 000024 07FE                          20          BCR   B'1111',14                                               00120011         
+ 000028 00000019                      21 NUM1     DC    F'25'                                                    00130011         
+ 00002C 00000025                      22 NUM2     DC    F'37'                                                    00140013         
+ 000030                               23 SUBANS   DS    F                                                        00141015         
+ 000034                               24 ADDANS   DS    F                                                        00142015         
+                                      25          END   ASSN2                                                    00150016         
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:     916 HIGH:     396 LEAVING:  492256 FREE BYTES. AVERAGE:       50 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.000 SECS,    26000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+0BEGIN XSNAP - CALL     1 AT E000001E USER STORAGE                                                                                
+0                             CORE ADDRESSES SPECIFIED-     000034 TO 00003C                                                      
+ 000020   00000000 07FEF5F5 00000019 00000025    0000000C 0000003E F5F5F5F5 00000000   *......55................5555....*         
+0                                                                                                                                 
+0BEGIN XSNAP - CALL     2 AT E0000024 USER REGISTERS                                                                              
+0 REGS 0-7      F4F4F4F4    0000003E    00000025    F4F4F4F4    F4F4F4F4    F4F4F4F4    F4F4F4F4    F4F4F4F4                      
+  REGS 8-15     F4F4F4F4    F4F4F4F4    F4F4F4F4    F4F4F4F4    F4F4F4F4    00000038    FFFE7960    00000000                      
+0                                                                                                                                 
+0*** EXECUTION TIME =    0.000 SECS.        10 INSTRUCTIONS EXECUTED -    10000 INSTRUCTIONS/SEC ***                              
+0*** FIRST CARD NOT READ: NO CARDS READ:FILE UNOPENED                                                                             
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                

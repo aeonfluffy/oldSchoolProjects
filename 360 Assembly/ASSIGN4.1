@@ -1,0 +1,62 @@
+//KC03PE7C JOB ,'Rachel Bastuk',MSGCLASS=H
+//STEP1 EXEC PGM=ASSIST
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+**********************************************************
+*NAME:              RACHEL BASTUK
+*ASSIGNMENT NUMBER: 4
+*INPUT:
+*OUTPUT:
+*REGISTERS USED:
+*PSUEDOCODE:
+*************************************************************
+ASSN4  CSECT
+       USING ASSN4,15
+       LA    R3,TABLE           BEGINNING OF TABLE
+       XREAD CARD,80            READ FIRST RECORD
+*STORING NUMBERS IN A TABLE
+DO1    BM    ENDDO1             WHILE MORE RECORDS
+       XDECI R2,CARD            GET NEXT RECORD
+DO2    BO    ENDDO2             AS LONG AS NOT *
+       ST    R2,0(R3)           STORE
+       LA    R3,4(R3)           LOAD NEXT POS
+       XDECI R2,0(R1)           GRAB NEXT #
+       B     DO2                REPEAT SECOND LOOP 
+ENDDO2 DS    0H                 ENDDO2
+       XREAD CARD,80
+       B     DO1                REPEAT FIRST LOOP
+ENDDO1 DS    0H                 ENDDO1
+       ST    R3,ENDTAB          SAVE END OF TABLE
+       XDUMP TABLE              DUMP TABLE
+*PRINTING NUMBERS IN THE TABLE
+       LA    R4,TABLE
+DO3    C     R4,ENDTAB
+       BNL   ENDDO3
+       L     R5,0(R4)
+       XDECO R5,NUM
+       XPRNT PLINE,13
+       LA    R4,4(R4)
+       B     DO3
+*
+ENDDO3 DS    0H
+       BR     14
+       LTORG
+*
+TABLE  DS    50F
+ENDTAB DS    F
+CARD   DS    80C
+INTER  DC    C' *'  
+PLINE  DC    C' '
+NUM    DS    CL12
+R1     EQU   1
+R2     EQU   2
+R3     EQU   3
+R4     EQU   4
+R5     EQU   5
+R6     EQU   6
+       END     ASSN4
+1 -2005     515   90 50   -1    19 172219     60205
+3    7534   204914    141  0 606031   -419  218 111
+9001  312909  -517 9 62  89  305   250 305 118
+-84        131     402   5106  121  -89 15   95221 -80

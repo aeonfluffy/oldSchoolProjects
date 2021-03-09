@@ -1,0 +1,30 @@
+//KC03PE7B JOB ,'RACHEL BASTUK',MSGCLASS=H                              00010011
+//STEP1 EXEC PGM=ASSIST                                                 00020011
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030011
+//SYSPRINT DD SYSOUT=*                                                  00040011
+//SYSIN DD *                                                            00050011
+*************************                                               00051017
+*NAME: RACHEL BASTUK                                                    00052017
+*                                                                       00053017
+*ASSIGNMENT 2                                                           00054017
+*                                                                       00055017
+*ADDING, SUBTRACTING, LOADING                                           00056017
+*WITHOUT LABELS/EXPLICIT                                                00057017
+***************************                                             00058017
+ASSN2    CSECT                                                          00060015
+         USING ASSN2,15                                                 00070015
+         L     1,40(15)                                                 00080015
+         L     2,44(15)                                                 00090015
+         SR    2,1         SUBTRACT REGISTERS                           00100018
+         ST    2,48(15)    STORE DIFFERENCE                             00101018
+         L     2,44(15)                                                 00102015
+         AR    1,2         ADD REGISTERS                                00103018
+         ST    1,52(15)    STORE SUM                                    00104018
+         XDUMP 52(15),8                                                 00105015
+         XDUMP                                                          00110011
+         BCR   B'1111',14                                               00120011
+NUM1     DC    F'25'                                                    00130011
+NUM2     DC    F'37'                                                    00140013
+SUBANS   DS    F                                                        00141015
+ADDANS   DS    F                                                        00142015
+         END   ASSN2                                                    00150016

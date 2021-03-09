@@ -1,0 +1,347 @@
+//KC03PE7C JOB ,'Rachel Bastuk',MSGCLASS=H
+//STEP1 EXEC PGM=ASSIST
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+****************************************************
+*
+*     ****FREE EXTENSION*****
+*     PROGRAMMER: RACHEL BASTUK
+*
+*     ASSIGNMENT: NUMBER 9
+*       THIS ASSIGNMENT PRODUCES A REPORT BASED ON GRADES
+*       THE FIRST LINE IS A CONTROL CARD THAT WILL CONTROL
+*           WHETHER OR NOT STATISTICS OR GRAPH INFORMATION WILL
+*           BE CALLED 
+*
+****************************************************
+*
+MAIN   CSECT
+       STM     R14,R12,12(R13)     SAVE REGISTERS
+       LR      R12,R15
+       USING   MAIN,R12            SETUP BASE REGISTER 
+       LA      R14,MNSAVE          POINT TO SAVE AREA
+       ST      R13,4(,R14)         BACKWARDS POINTER 
+       ST      R14,8(,R13)         FORWARD POINTER 
+       LR      R13,R14
+*
+*PROCESS FIRST LINE    
+       XREAD   FL,80      
+TEST1  DS      0H                  COLUMN1 IS TO PRINT STAT  
+       CLI     FL,C'Y'             CHECK IF FIRST COLUMN IS 1
+       BNE     TEST2
+       OI      FLAG,B'10000000'    CHANGE BIT ONE IN FLAG
+TEST2  DS      0H                  COLUMN5 TO PRINT GRAPH 
+       CLI     FL+4,C'Y'           CHECK 5TH COLUMN
+       BNE     ENDT  
+       OI      FLAG,B'00000001'    CHANGE 7TH BIT FOR FLAG 
+ENDT   DS      0H        
+       XDUMP   FLAG,8    
+*   CALL BUILD 
+       LA      R1,PLIST1
+       L       R15,=V(BUILD) 
+       BALR    R14,R15
+*RUN TESTS
+*****
+*STATS TEST
+*****
+ST     DS      0H                  LABEL 
+       TM      FLAG,B'10000000'    TEST FIRST BIT FOR STATS 
+       BZ      GR                  BRANCH TO GRAPH 
+       LA      R1,PLIST1
+       L       R15,=V(STATS)
+       BALR    R14,R15
+****
+*GRAPH TEST
+****
+GR     DS      0H
+       TM      FLAG,B'00000001'    TEST LAST BIT FOR GRAPH 
+       BZ      ENDC                BRANCH TO ENDC 
+       LA      R1,PLIST1
+       L       R15,=V(GRAPH)
+       BALR    R14,R15
+ENDC   DS      0H
+*
+       L       R13,4(,R13)         LOAD ADDRESS OF CALLER
+       LM      R14,R12,12(R13)     RESTORE ALL BUT 13
+       BR      R14                 RETURN 
+       LTORG
+*MAIN SAVE 
+*
+MNSAVE DS      18F 
+FLAG   DC      X'00'
+*      BIT 0 = 1 RUN STAT REPORT
+*      BIT 1 - 6 UNUSED
+*      BIT 7 = 1 RUN GRAPH
+TABLE  DS      20CL22
+EOT    DC      A(TABLE)
+PLIST1 DC      A(TABLE,EOT)
+FL     DS      80C
+***
+*DSECTS FOR BUILD
+***
+$RECORD DSECT
+$STAT   DS      PL2
+$NAME   DS      CL20
+************************
+* SUBROUTINE - BUILD *
+************************
+*
+BUILD  CSECT
+       STM     R14,R12,12(R13)     SAVE REGISTERS
+       LR      R12,R15
+       USING   BUILD,R12           SETUP BASE REGISTER 
+       USING   $RECORD,R2 
+       LA      R14,BSAVE           POINT TO SAVE AREA
+       ST      R13,4(,R14)         BACKWARDS POINTER 
+       ST      R14,8(,R13)         FORWARD POINTER 
+       LR      R13,R14
+       LM      R2,R3,0(R1)         GET PARMS
+*                                  R2 - @TABLE R3 - @EOT
+       XREAD   CARD,80             READ FIRST CARD
+DO1    BM      ENDDO1              WHILE MORE RECORDS
+       PACK    $STAT,CARD(3)       PACK FIRST NUMBER
+       MVC     $NAME,CARD+3        MOVE NAME 
+       LA      R2,22(R2)           INCREMENT TABLE POINTER 
+       XREAD   CARD,80             READ NEXT CARD
+       B       DO1                 LABEL
+ENDDO1 DS      0H                  LABEL
+       ST      R2,0(R3)            STORE END OF TABLE
+       L       R13,4(,R13)         LOAD ADDRESS OF CALLER
+       LM      R14,R12,12(R13)     RESTORE ALL BUT 13
+       BR      R14                 RETURN 
+       LTORG
+***************
+*BUILD STORAGE
+***************
+BSAVE  DS      18F
+CARD   DS      80C
+INTERC DC      C' '
+************************
+* SUBROUTINE - STATS *
+************************
+*
+STATS  CSECT
+*LINKAGE
+       STM     R14,R12,12(R13)     SAVE REGISTERS
+       LR      R12,R15
+       USING   STATS,R12           SETUP BASE REGISTER 
+       LA      R14,SSAVE           POINT TO SAVE AREA
+       ST      R13,4(,R14)         BACKWARDS POINTER 
+       ST      R14,8(,R13)         FORWARD POINTER 
+       LR      R13,R14
+       LM      R2,R3,0(R1)         GET PARMS
+*                                  R2 - @TABLE R3 - @EOT
+*
+       L       R3,0(R3)            GET ACTUAL END OF TABLE
+       XPRNT   HDR1,132            PRINT OUT THE HEADER
+       XPRNT   PLINE,132           PRINT A SINGLE CLEAR LINE
+       ZAP     TOTAL(3),=P'0'      ZERO OUT TOTAL BEFORE ADDING
+*DO LOOP
+DO2    CR      R2,R3               IF AT END
+       BNL     ENDDO2              BRANCH TO ENDDO
+       MVC     PLINE+1(20),2(R2)   LOAD NAME INTO PRINTLINE
+       MVC     PLINE+21(4),PTTRN   MOVE PATTERN
+       ED      PLINE+21(4),0(R2)   EDIT PACKED #
+       AP      TOTAL(3),0(2,R2)    ADD TO THE TOTAL       
+       LA      R2,22(R2)           INCREMENT THE TABLE
+       XPRNT   PLINE,132           PRINT TOTAL RENT 
+       MVI     PLINE,C' '          CLEAR PLINE
+       MVC     PLINE+1(131),PLINE
+       AP      COUNT(2),=P'1'         INCREMENT COUNT
+       B       DO2
+ENDDO2 DS      0H
+***
+*PRINTING THE AVERAGE
+****
+       XPRNT   AVG,132
+       ZAP     TEMP(5),TOTAL(3)    PREPARE TEMP FOR DIVISION
+       SRP     TEMP(5),2,0
+       DP      TEMP(5),COUNT(2)    DIVIDE
+       MVC     PLINE+1(9),TPTTRN   MOVE PATTERN INTO PLINE
+       ED      PLINE+1(9),TEMP     MOVE PACKED TEMP INTO PLINE
+       XPRNT   PLINE,132           PRINT
+***
+*LINKAGE
+***
+       L       R13,4(,R13)         LOAD ADDRESS OF CALLER
+       LM      R14,R12,12(R13)     RESTORE ALL BUT 13
+       BR      R14                 RETURN 
+       LTORG
+***************
+*STATS STORAGE
+***************
+SSAVE  DS      18F
+HDR1   DC      CL132' CLASS STATISTICS' 
+AVG    DC      CL132' AVERAGE'
+TOTAL  DS      PL3
+PLINE  DC      CL132' '
+PTTRN  DC      X'40202020'
+TPTTRN DC      X'402020204B2020'
+TEMP   DC      PL5'0'
+COUNT  DC      PL2'0'
+************************
+* SUBROUTINE - GRAPH *
+*R4     GRADE 92 - 100
+*R5     GRADE 84 -  91
+*R6     GRADE 76 -  83
+*R7     GRADE 68 -  75
+*R8     GRADE  0 -  67
+************************
+*
+GRAPH  CSECT
+*LINKAGE
+       STM     R14,R12,12(R13)     SAVE REGISTERS
+       LR      R12,R15
+       USING   GRAPH,R12           SETUP BASE REGISTER 
+       LA      R14,GSAVE           POINT TO SAVE AREA
+       ST      R13,4(,R14)         BACKWARDS POINTER 
+       ST      R14,8(,R13)         FORWARD POINTER 
+       LR      R13,R14
+       LM      R2,R3,0(R1)         GET PARMS
+*                                  R2 - @TABLE R3 - @EOT
+*
+       L       R3,0(R3)            GET ACTUAL END OF TABLE 
+       XPRNT   GRPHH,132           PRINT HEADER 
+*ZERO OUT ALL THE REGISTERS 
+       SR      R4,R4 
+       SR      R5,R5
+       SR      R6,R6 
+       SR      R7,R7 
+       SR      R8,R8 
+DO3    CR      R2,R3
+       BNL     ENDDO3              BRANCH TO ENDDO
+*IF STATEMENTS
+IF1    CP      0(2,R2),=P'92'      CHECK IF IT'S HIGHER THAN 92
+       BL      ELIF1               IF LOWER GO TO ELIF1
+       LA      R4,1(R4)            INCREMENT 
+       B       END1                BRANCH BACK UP
+ELIF1  CP      0(2,R2),=P'84'      CHECK IF HIGHER THAN 84
+       BL      ELIF2               IF LOWER GO TO ELIF2
+       LA      R5,1(R5)            INCREMENT 
+       B       END1                BRANCH BACK UP
+ELIF2  CP      0(2,R2),=P'76'      CHECK IF HIGHER THAN 76
+       BL      ELIF3               IF LOWER GO TO ELIF3
+       LA      R6,1(R6)            INCREMENT 
+       B       END1                BRANCH BACK UP
+ELIF3  CP      0(2,R2),=P'68'      CHECK IF HIGHER THAN 68
+       BL      ELSE1               IF LOWER GO TO ELSE1
+       LA      R7,1(R7)            INCREMENT 
+       B       END1                BRANCH BACK UP
+ELSE1  CP      0(2,R2),=P'67'      CHECK FOR 0 - 67
+       BH      END1                IF HIGHER THAN 67 BRANCH
+       LA      R8,1(R8)            INCREMENT 
+       B       END1                BRANCH BACK UP 
+END1   DS      0H
+       LA      R2,22(R2)           INCREMENT TABLE POSITION
+       B       DO3
+ENDDO3 DS      0H
+*
+*PRINTING THE STARS 
+******FIRST STAR SET********
+       MVC     PLINE1+1(8),=C'92 - 100'
+       C       R4,=F'0'            MAKE SURE R4 ISN'T 0
+       BE      PRINT1              IF IT IS JUST BRANCH 
+       BCTR    R4,R0               DECRIMENT BY 1
+       EX      R4,MOVE             GRADE 92 - 100 
+PRINT1 DS      0H
+       XPRNT   PLINE1,132
+       MVI     PLINE1,C' '         CLEAR PLINE
+       MVC     PLINE1+1(131),PLINE1
+******SECOND STAR SET********
+       MVC     PLINE1+1(8),=C'84 -  91'
+       C       R5,=F'0'            MAKE SURE R4 ISN'T 0
+       BE      PRINT2              IF IT IS JUST BRANCH 
+       BCTR    R5,R0               DECRIMENT BY 1
+       EX      R5,MOVE             GRADE 92 - 100 
+PRINT2 DS      0H
+       XPRNT   PLINE1,132
+       MVI     PLINE1,C' '         CLEAR PLINE
+       MVC     PLINE1+1(131),PLINE1
+******THIRD STAR SET********
+       MVC     PLINE1+1(8),=C'76 -  83'
+       C       R6,=F'0'            MAKE SURE R4 ISN'T 0
+       BE      PRINT3              IF IT IS JUST BRANCH 
+       BCTR    R6,R0               DECRIMENT BY 1
+       EX      R6,MOVE             GRADE 92 - 100 
+PRINT3 DS      0H
+       XPRNT   PLINE1,132
+       MVI     PLINE1,C' '         CLEAR PLINE
+       MVC     PLINE1+1(131),PLINE1
+******FOURTH STAR SET********
+       MVC     PLINE1+1(8),=C'68 -  75'
+       C       R7,=F'0'            MAKE SURE R4 ISN'T 0
+       BE      PRINT4              IF IT IS JUST BRANCH 
+       BCTR    R7,R0               DECRIMENT BY 1
+       EX      R7,MOVE             GRADE 92 - 100 
+PRINT4 DS      0H
+       XPRNT   PLINE1,132
+       MVI     PLINE1,C' '         CLEAR PLINE
+       MVC     PLINE1+1(131),PLINE1
+******FIFTH STAR SET********
+       MVC     PLINE1+1(8),=C' 0 -  67'
+       C       R8,=F'0'            MAKE SURE R4 ISN'T 0
+       BE      PRINT5              IF IT IS JUST BRANCH 
+       BCTR    R8,R0               DECRIMENT BY 1
+       EX      R8,MOVE             GRADE 92 - 100 
+PRINT5 DS      0H
+       XPRNT   PLINE1,132
+       MVI     PLINE1,C' '         CLEAR PLINE
+       MVC     PLINE1+1(131),PLINE1
+*LINKAGE
+       L       R13,4(,R13)         LOAD ADDRESS OF CALLER
+       LM      R14,R12,12(R13)     RESTORE ALL BUT 13
+       BR      R14                 RETURN 
+       LTORG
+***************
+*GRAPH STORAGE
+***************
+GSAVE  DS      18F
+MOVE   MVC     PLINE1+30(0),STARS
+STARS  DC      132C'*'
+PLINE1 DC      CL132' '
+TNUM   DS      PL5
+GTPTN  DC      X'40202020202020202020'
+GRPHH  DC      CL132' CLASS GRADE DISTRIBUTION'
+***********
+* EQUATES *
+***********
+*
+R0     EQU     0
+R1     EQU     1
+R2     EQU     2
+R3     EQU     3
+R4     EQU     4
+R5     EQU     5
+R6     EQU     6
+R7     EQU     7
+R8     EQU     8
+R9     EQU     9
+R10    EQU     10
+R11    EQU     11
+R12    EQU     12
+R13    EQU     13
+R14    EQU     14
+R15    EQU     15
+       END    MAIN
+/*
+//*
+//FT05F001 DD  *
+Y   Y
+099Hi Story
+063Anita Bath
+079Drew P. Drawers
+098Ima Hogg
+012Kurt Answer
+088Ann Honour
+083Ivanna Tinkle
+078Bea Tidy
+066I. P. Freely
+088Jim Shorts
+076Dane Knight
+077U. C. Forever
+100Doug A. Hole
+092Mary Way
+055Bott M. Feeder
+/*
+//

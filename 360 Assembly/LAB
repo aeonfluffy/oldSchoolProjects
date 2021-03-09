@@ -1,0 +1,26 @@
+//KC03PE7A JOB ,'Rachel Bastuk',MSGCLASS=H                              00010000
+//STEP1 EXEC PGM=ASSIST                                                 00020000
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030000
+//SYSPRINT DD SYSOUT=*                                                  00040000
+//SYSIN DD *                                                            00050000
+***********************                                                 00060000
+* EXAMPLE PROGRAM                                                       00070001
+*                                                                       00080000
+* NAME: Rachel Bastuk                                                   00090001
+*                                                                       00100000
+* Register Usage                                                        00110001
+*                                                                       00120000
+*  3     Total                                                          00130001
+*  4     Counter                                                        00140001
+* 15     Base register                                                  00150001
+*                                                                       00160000
+***********************                                                 00170000
+MAIN     CSECT                                                          00180000
+         USING MAIN,15                                                  00190000
+         SR    4,4    ZERO FOR TOTAL                                    00200000
+         SR    5,5    ZERO FOR COUNTER                                  00210000
+         XDUMP                                                          00220000
+         BR    14                                                       00230000
+         END   MAIN                                                     00240000
+/*                                                                      00250001
+//                                                                      00260000

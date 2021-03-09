@@ -1,0 +1,205 @@
+//KC03PE7C JOB ,'Rachel Bastuk',MSGCLASS=H
+//STEP1 EXEC PGM=ASSIST
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+*
+*MAIN
+*ASSIGNMENT NUMBER 5
+*PSEUDOCODE:
+*     CALL BUILD SUBROUTINE (WITH TABLE, EOT PARAMETERS)
+*     CALL PRINT SUBROUTINE (WITH TABLE, EOT, AND LINE #'S)
+*     CALL SORT SUBROUTINE (WITH TABLE, EOT PARAMETERS)
+*     CALL PRINT SUBROUTINE (WITH TABLE, EOT, AND LINE #'S)
+*
+MAIN   CSECT
+       USING   MAIN,15
+       LA      R1,PLIST1       LOAD THE PARAMETER LIST
+       BAL     R13,BUILD       CALL BUILD SUBROUTINE
+       LA      R1,PLIST2       LOAD THE PRINTLIST PARAMETERS
+       BAL     R13,PRINT       CALL PRINT SUBROUTINE
+       LA      R1,PLIST1       LOAD PARAMETER LIST FOR SWAP
+       BAL     R13,SWAP        CALL SWAP SUBROUTINE
+       LA      R1,PLIST3       LOAD PRINTLIST PARAMETERS
+       BAL     R13,PRINT       CALL THE PRINT SUBROUTINE
+       BR      14
+       LTORG
+********************
+***MAIN STORAGE ****
+********************
+R0     EQU     0
+R1     EQU     1
+R2     EQU     2
+R3     EQU     3
+R4     EQU     4
+R5     EQU     5
+R6     EQU     6
+R7     EQU     7
+R8     EQU     8
+R13    EQU     13
+R15    EQU     15
+PLIST1 DC      A(TABLE,EOT)
+TABLE  DC      50F'-1'
+EOT    DS      F
+NUM1   DC      F'3'
+NUM2   DC      F'6'
+PLIST2 DC      A(TABLE,EOT,NUM1)
+PLIST3 DC      A(TABLE,EOT,NUM2)
+*
+*BUILDING A TABLE
+*PARAMETERS: TABLE, END OF TABLE
+*OUTPUT:     A BUILT TABLE
+*            STORES THE END OF FILE IN EOT PARAMETER
+*REGISTERS:  R2 HOLDS TABLE
+*            R3 HOLDS EOT
+*            R4 HOLDS CARD READER
+*            PSUEDOCODE:
+*            READ CARD:
+*            WHILE NOT AT EOF-
+*                  READ FIRST LINE
+*                       WHILE MORE RECORDS IN A LINE
+*                             STORE IN TABLE
+*            STORE END OF TABLE
+*
+BUILD  DS      0H
+       STM     R0,R15,BSAVE    SAVE REGISTERS
+       LM      R2,R3,0(R1)     LOAD THE PLIST
+*                              R2 - @TABLE
+*                              R3 - @EOT
+       XREAD   CARD,80         READ FIRST CARD
+DO1    BM      ENDDO1          WHILE MORE RECORDS
+       XDECI   R4,CARD         READ NEXT
+DO2    BO      ENDDO2
+       ST      R4,0(R2)        STORE IN TABLE
+       LA      R2,4(R2)        LOAD NEXT POS IN TABLE
+       XDECI   R4,0(R1)        GRAB NEXT #
+       B       DO2             BRANCH BACK TO DO2
+ENDDO2 DS      0H              ENDDO 2
+       XREAD   CARD,80         CHECK NEXT LINE FOR CARD
+       B       DO1             BRANCH BACK TO FIRST LOOP
+ENDDO1 DS      0H
+       ST      R2,0(R3)        STORE END OF TABLE IN EOT
+       LM      R0,R15,BSAVE    LOAD REGISTERS
+       BR      13
+       LTORG
+********************
+***BUILD STORAGE****
+********************
+BSAVE  DS      16F
+CARD   DS      80C
+INTER  DC      C' *'
+*************************
+*PRINT SUBROUTINE
+*REGISTERS 2 - @TABLE 
+*          3 - @EOT
+*          4 - @NUM1
+*          5 - @PLINE
+*          6 - COUNTER  
+*          7 - DECO
+*          8 - TABLE INCREMENT
+*PARAMETERS: @TABLE, @EOT, @LINE NUMBERS
+*OUTPUTS:    A TABLE WITH NUM1 COLUMNS
+*PSUEDOCODE:
+*           WHILE NOT AT END OF TABLE
+*                 ADD RECORDS TO TABLE
+*                 IF COUNT == NUM1
+*                         PRINT THE LINE
+*                         RESET PRINT COUNTER, RESET PLINE
+*                  INCREMENT THE COUNT, INCREMENT THE PLINE
+*          PRINT ANY LEFTOVER LINES
+*************************
+PRINT  DS      0H       
+       STM     R0,R15,PSAVE
+       LM      R2,R4,0(R1)        R2 - @TABLE, R3 - @EOT, R4 - @NUM1
+       L       R4,0(R4)           GET VALUE INTO R4
+       L       R3,0(R3)           GET ACTUAL END OF TABLE
+       SR      R6,R6              SET COUNTER TO 0
+       LA      R5,PLINE           LOAD PLINE ADDRESS
+       CR      R2,R3              CHECK IF AT END
+DO3    BNL     ENDDO3
+       L       R7,0(R2)           LOAD NUMBER
+       XDECO   R7,0(R5)           ADD TO PLINE
+       LA      R5,12(R5)          INCREMENT PLINE
+       LA      R6,1(R6)           INCREMENT COUNTER
+       CR      R6,R4              CHECK THE COUNT
+IF1    BNZ     ENDIF1
+       XPRNT   PLINE,132          PRINT
+       LA      R5,PLINE           RESET PLINE POINTER
+       SR      R6,R6              RESET COUNTER
+       MVI     PLINE,C' '         CLEAR PLINE
+       MVC     PLINE+1(131),PLINE
+ENDIF1 DS      0H     
+       LA      R2,4(R2)           INCREMENT TABLE POINTER
+       CR      R2,R3              CHECK IF AT END
+       B       DO3                 BRANCH BACK TO DO3
+ENDDO3 DS      0H
+       XPRNT PLINE,132          LEFTOVER PRINTING
+       MVI   PLINE,C' '         CLEAR PLINE
+       MVC PLINE+1(131),PLINE
+       LM      R0,R15,PSAVE
+       BR      13
+       LTORG
+***********************
+*PRINT STORAGE
+***********************
+PSAVE  DS      16F
+PLINE  DC      CL132' '
+**********************
+***SWAPPING***********
+**********************
+*SWAPPING A TABLE
+*PARAMETERS: TABLE, END OF TABLE
+*OUTPUT:     SORTED TABLE
+*REGISTERS:  R2 HOLDS TABLE
+*            R3 HOLDS EOT
+*            R4 HOLDS NEW BEGINNING
+*            R5 HOLDS @I
+*            R6 HOLDS THE KEY TO LOW
+*            R7 & R8 ARE USED FOR SWAPPING
+*
+SWAP   DS      0H
+       STM     R0,R15,SSAVE    SAVE REGISTERS
+       LM      R2,R3,0(R1)     LOAD THE PLIST
+*                              R2 - @TABLE
+*                              R3 - @EOT
+       L       R3,0(R3)        GET ACTUAL END OF TABLE
+DO4    CR      R2,R3           CHECK IF AT END
+       BNL     ENDDO4
+       LR      R4,R2           LOW = BEGIN
+       LA      R5,4(R2)        I = BEGIN + 1
+DO5    CR      R5,R3           Do While (I not > END)
+       BNL     ENDDO5
+       L       R6,0(R4)        R6 = KEY (LOW)       
+IF2    C       R6,0(R5)        If Key (LOW) > Key (I)
+       BNH     ENDIF2  
+       LR      R4,R5           LOW = I
+ENDIF2 DS      0H
+       LA      R5,4(R5)        I = I + 1
+       B       DO5         
+ENDDO5 DS      0H
+       L       R7,0(R2)        R7 WITH CURRENT TABLE POS
+       L       R8,0(R4)        R8 WITH TEMP BEGIN
+       ST      R7,0(R4)        STORE TABLE POS
+       ST      R8,0(R2)        STORE NUMBER
+       LA      R2,4(R2)        BEGIN = BEGIN + 1
+       B       DO4
+ENDDO4 DS      0H
+       LM      R0,R15,SSAVE  
+       BR      13
+       LTORG
+***********************
+*SWAP STORAGE**********
+***********************
+SSAVE  DS      16F
+       END     MAIN
+356 45   2                    50
+66          77
+0          -45            98
+222        -789
+77
+87
+25
+-346     8
+100              543          -4
+88          92 51          57
+1234

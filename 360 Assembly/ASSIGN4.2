@@ -1,0 +1,79 @@
+//KC03PE7C JOB ,'Rachel Bastuk',MSGCLASS=H
+//STEP1 EXEC PGM=ASSIST
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+**********************************************************
+*NAME:              RACHEL BASTUK
+*ASSIGNMENT NUMBER: 4
+*INPUT:
+*OUTPUT:
+*REGISTERS USED:
+*PSUEDOCODE:
+*************************************************************
+ASSN4  CSECT
+       USING ASSN4,15
+       LA    R3,TABLE           BEGINNING OF TABLE
+       XREAD CARD,80            READ FIRST RECORD
+*STORING NUMBERS IN A TABLE
+DO1    BM    ENDDO1             WHILE MORE RECORDS
+       XDECI R2,CARD            GET NEXT RECORD
+DO2    BO    ENDDO2             AS LONG AS NOT *
+       ST    R2,0(R3)           STORE
+       LA    R3,4(R3)           LOAD NEXT POS
+       XDECI R2,0(R1)           GRAB NEXT #
+       B     DO2                REPEAT SECOND LOOP 
+ENDDO2 DS    0H                 ENDDO2
+       XREAD CARD,80
+       B     DO1                REPEAT FIRST LOOP
+ENDDO1 DS    0H                 ENDDO1
+       ST    R3,ENDTAB          SAVE END OF TABLE
+       XDUMP TABLE              DUMP TABLE
+*PRINTING NUMBERS IN THE TABLE
+       LA    R4,TABLE           LOAD BEGINNING OF TABLE
+       LA    R6,PLINE           LOAD POINTER TO PLINE ADDRESS
+       SR    R7,R7              INIT COUNTER
+DO3    C     R4,ENDTAB          WHILE THERE'S STILL MORE
+       L     R8,0(R4)           GET NUMBER
+       M     R8,=F'1'           PREPARE MULTIPLY
+       D     R8,=F'2'           DIVIDE TO CHECK EVENNESS
+       LTR   R8,R8              TEST R8 FOR A ZERO
+IF1    BNZ   ENDIF1
+       L     R8,0(R4)
+       XDECO R5,0(R6)           ADD TO PLINE
+       LA    R6,12(R6)          INCREMENT PLINE
+       LA    R7,1(R7)           INCREMENT COUNTER
+        C     R7,=F'5'          CHECK IF COUNT IS 5
+IF2    BNZ   ENDIF2
+       XPRNT PLINE,132          PRINT
+       LA    R6,PLINE           RESET PLINE POINTER
+       SR    R7,R7              RESET COUNTER
+       MVI   PLINE,C' '         CLEAR PLINE
+       MVC PLINE+1(131),PLINE
+ENDIF2 DS    0H      
+ENDIF1 DS    0H
+        LA    R4,4(R4)          INCREMENT TABLE POINTER
+        B    DO3
+ENDDO3 DS    0H
+       BR     14
+       LTORG
+*
+TABLE  DS    50F
+ENDTAB DS    F
+CARD   DS    80C
+INTER  DC    C' *'  
+PLINE  DC    CL132' '
+R1     EQU   1
+R2     EQU   2
+R3     EQU   3
+R4     EQU   4
+R5     EQU   5
+R6     EQU   6
+R7     EQU   7
+R8     EQU   8
+R9     EQU   9
+       END     ASSN4
+1 -2005     515   90 50   -1    19 172219     60205
+3    7534   204914    141  0 606031   -419  218 111
+9001  312909  -517 9 62  89  305   250 305 118
+-84        131     402   5106  121  -89 15   95221 -80

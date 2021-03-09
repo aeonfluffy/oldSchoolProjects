@@ -1,0 +1,111 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 22.09.30 JOB02546 ---- FRIDAY,    23 SEP 2016 ----
+ 22.09.30 JOB02546  IRR010I  USERID KC03PE7  IS ASSIGNED TO THIS JOB.
+ 22.09.30 JOB02546  ICH70001I KC03PE7  LAST ACCESS AT 22:09:04 ON FRIDAY, SEPTEMBER 23, 2016
+ 22.09.30 JOB02546  $HASP373 KC03PE7C STARTED - INIT 4    - CLASS A        - SYS S0W1
+ 22.09.30 JOB02546  IEC130I FT05F001 DD STATEMENT MISSING
+ 22.09.30 JOB02546  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 22.09.30 JOB02546  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 22.09.30 JOB02546  -KC03PE7C                      00     37 ******    .00     .0    115   0      0      0      0     0
+ 22.09.30 JOB02546  -KC03PE7C ENDED.  NAME-Rachel Bastuk        TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 22.09.30 JOB02546  $HASP395 KC03PE7C ENDED
+0------ JES2 JOB STATISTICS ------
+-  23 SEP 2016 JOB EXECUTION DATE
+-           58 CARDS READ
+-          111 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-            7 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03PE7C JOB ,'Rachel Bastuk',MSGCLASS=H                              JOB02546
+         2 //STEP1 EXEC PGM=ASSIST                                                         
+         3 //STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                                
+         4 //SYSPRINT DD SYSOUT=*                                                          
+         5 //SYSIN DD *                                                                    
+ ICH70001I KC03PE7  LAST ACCESS AT 22:09:04 ON FRIDAY, SEPTEMBER 23, 2016
+ IEF236I ALLOC. FOR KC03PE7C STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IEC130I FT05F001 DD STATEMENT MISSING
+ IEF142I KC03PE7C STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03PE7.KC03PE7C.JOB02546.D0000102.?         SYSOUT        
+ IEF285I   KC03PE7.KC03PE7C.JOB02546.D0000101.?         SYSIN         
+ IEF373I STEP/STEP1   /START 2016267.2209
+ IEF032I STEP/STEP1   /STOP  2016267.2209 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   268K  EXT:        0K  SYS:    11456K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03PE7C/START 2016267.2209
+ IEF033I  JOB/KC03PE7C/STOP  2016267.2209 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 **********************************************************                               
+                                       2 *NAME:              RACHEL BASTUK                                                        
+                                       3 *ASSIGNMENT NUMBER: 4                                                                    
+                                       4 *INPUT:                                                                                  
+                                       5 *OUTPUT:                                                                                 
+                                       6 *REGISTERS USED:                                                                         
+                                       7 *PSUEDOCODE:                                                                             
+                                       8 *************************************************************                            
+ 000000                                9 ASSN4  CSECT                                                                             
+ 000000                               10        USING   ASSN4,15                                                                  
+ 000000 4130 F058            00058    11        LA    R3,TABLE           BEGINNING OF TABLE                                       
+ 000004 E000 F124 0050 00124          12        XREAD CARD,80            READ FIRST RECORD                                        
+                                      13 *STORING NUMBERS IN A TABLE                                                              
+ 00000A 4740 F02A            0002A    14 DO1    BC    B'0100',ENDDO1     WHILE MORE RECORDS                                       
+ 00000E 5320 F124            00124    15        XDECI R2,CARD            GET NEXT RECORD                                          
+ 000012 4710 F02A            0002A    16 DO2    BC    B'0001',ENDDO2     AS LONG AS NOT *                                         
+ 000016 5023 0000            00000    17        ST    R2,0(R3)           STORE                                                    
+ 00001A 4133 0004            00004    18        LA    R3,4(R3)           LOAD NEXT POS                                            
+ 00001E 5321 0000            00000    19        XDECI R2,0(R1)           GRAB NEXT #                                              
+ 000022 47F0 F012            00012    20        B     DO2                                                                         
+ 000026 47F0 F00A            0000A    21        B     DO1                                                                         
+ 00002A                               22 ENDDO2 DS    0H                 ENDDO2                                                   
+ 00002A                               23 ENDDO1 DS    0H                 ENDDO1                                                   
+ 00002A 5030 F120            00120    24        ST    R3,ENDTAB          SAVE END OF TABLE                                        
+ 00002E E060 F058 0004 00058          25        XDUMP TABLE              DUMP TABLE                                               
+                                      26 *PRINTING NUMBERS IN THE TABLE                                                           
+ 000034 4140 F058            00058    27        LA    R4,TABLE                                                                    
+ 000038 5940 F120            00120    28 DO3    C     R4,ENDTAB                                                                   
+ 00003C 47B0 F056            00056    29        BNL   ENDDO3                                                                      
+ 000040 5854 0000            00000    30        L     R5,0(R4)                                                                    
+ 000044 5250 F176            00176    31        XDECO R5,NUM                                                                      
+ 000048 E020 F175 000D 00175          32        XPRNT PLINE,13                                                                    
+ 00004E 4144 0004            00004    33        LA    R4,4(R4)                                                                    
+ 000052 47F0 F038            00038    34        B     DO3                                                                         
+                                      35 *                                                                                        
+ 000056                               36 ENDDO3 DS    0H                                                                          
+ 000056 07FE                          37        BR     14                                                                         
+                                      38        LTORG                                                                             
+                                      39 *                                                                                        
+ 000058                               40 TABLE  DS    50F                                                                         
+ 000120                               41 ENDTAB DS    F                                                                           
+ 000124                               42 CARD   DS    80C                                                                         
+ 000174 5C                            43 INTER  DC    C'*'                                                                        
+ 000175 40                            44 PLINE  DC    C' '                                                                        
+ 000176                               45 NUM    DS    CL12                                                                        
+ 000001                               46 R1     EQU   1                                                                           
+ 000002                               47 R2     EQU   2                                                                           
+ 000003                               48 R3     EQU   3                                                                           
+ 000004                               49 R4     EQU   4                                                                           
+ 000005                               50 R5     EQU   5                                                                           
+ 000006                               51 R6     EQU   6                                                                           
+                                      52        END     ASSN4                                                                     
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:    1768 HIGH:     664 LEAVING:  491136 FREE BYTES. AVERAGE:       45 BYTES/STMT ***            
+1*** ASSEMBLY TIME =    0.000 SECS,    53000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+0BEGIN XSNAP - CALL     1 AT F0000034 USER STORAGE                                                                                
+0                             CORE ADDRESSES SPECIFIED-     000058 TO 00005C                                                      
+ 000040   58540000 5250F176 E020F175 000D4144    000447F0 F03807FE 00000001 FFFFF82B   *......1...1........00.........8.*         
+0                                                                                                                                 
+            1                                                                                                                     
+        -2005                                                                                                                     
+0*** EXECUTION TIME =    0.000 SECS.        35 INSTRUCTIONS EXECUTED -    35000 INSTRUCTIONS/SEC ***                              
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                

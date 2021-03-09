@@ -1,0 +1,352 @@
+//KC03PE7C JOB ,'Rachel Bastuk',MSGCLASS=H
+//STEP1 EXEC PGM=ASSIST,PARM='MACRO=F'
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+****************************************************
+*
+*     PROGRAMMER: RACHEL BASTUK
+*
+*     ASSIGNMENT: ASSIGNMENT 10
+*
+*         PUT YOUR DOC HERE:
+*               BUILDS TWO TABLES FROM A FILE
+*               SORT BOTH OF THEM
+*               PRINT THEM
+*               MERGE THEM 
+*               PRINT THE MERGED TABLES 
+*
+*          NOTES: THESE ARE EXTERNAL SUBROUTINES
+*                 THIS IS USING A MACRO TO 
+*                  LINK EXTERNAL SUBROUTINES ENTRY
+*
+****************************************************
+*
+********
+*MACRO
+*FOR &BREG USE NAME THEN REGISTER
+*BREG(1) = CSECT NAME 
+*BREG(2) = BASE REGISTER 
+********
+         MACRO 
+&LABEL MYSAVE &BREG,&MYSAVE
+       STM     R14,R12,12(R13)     SAVE REGISTERS  
+*IF &BREG HAS BEEN SUPPLIED       
+       AIF     ('&BREG(2)' EQ '').NOREG
+       LR      &BREG(2),R15
+       USING   &BREG(1),&BREG(2)   SETUP BASE REGISTER 
+*BRANCH AROUND
+       B       PA&SYSNDX
+*IF &BREG IS MISSING, USE REGISTER 12 AS THE BASE REGISTER.
+.NOREG   ANOP
+       LR      R12,R15
+       USING   &BREG(1),R12         SETUP BASE REGISTER
+PA&SYSNDX DS      0H
+*IF &MYSAVE IS SUPPLIED       
+       AIF   ('&MYSAVE' EQ '').NOSAVE
+       LA      R14,&MYSAVE         POINT TO SAVE AREA
+       ST      R13,4(,R14)         BACKWARDS POINTER 
+       ST      R14,8(,R13)         FORWARD POINTER 
+       LR      R13,R14
+*BRANCH AROUND 
+       B       PAST&SYSNDX
+*IF &MYSAVE IS MISSING, CREATE AN 18 FULLWORD SAVEAREA
+.NOSAVE   ANOP
+       LA      R14,SAVE&SYSNDX     POINT TO SAVE AREA
+       ST      R13,4(,R14)         BACKWARDS POINTER 
+       ST      R14,8(,R13)         FORWARD POINTER 
+       LR      R13,R14
+*BE SURE TO BRANCH AROUND IT
+       B       PAST&SYSNDX
+SAVE&SYSNDX   DS     18F
+PAST&SYSNDX   DS     0H
+         MEND
+******************************
+*END MACRO 
+*****************************
+MAIN   CSECT
+       MYSAVE (MAIN,12),MNS
+*   CALL BUILD 
+       LA      R1,BLIST1
+       L       R15,=V(BUILD) 
+       BALR    R14,R15
+*   CALL SORT 
+       LA      R1,BLIST1    
+       L       R15,=V(SORT)
+       BALR    R14,R15
+*   CALL PRINT
+       LA      R1,PLIST1 
+       L       R15,=V(PRINT) 
+       BALR    R14,R15
+*   CALL BUILD 
+       LA      R1,BLIST2 
+       L       R15,=V(BUILD)
+       BALR    R14,R15
+*   CALL SORT  
+       LA      R1,BLIST2 
+       L       R15,=V(SORT) 
+       BALR    R14,R15
+*   CALL PRINT 
+       LA      R1,PLIST2
+       L       R15,=V(PRINT) 
+       BALR    R14,R15
+*   CALL MERGE 
+       LA      R1,BLIST3
+       L       R15,=V(MERGE) 
+       BALR    R14,R15
+*   CALL PRINT 
+       LA      R1,PLIST3 
+       L       R15,=V(PRINT) 
+       BALR    R14,R15
+*      
+       L       R13,4(,R13)         LOAD ADDRESS OF CALLER
+       LM      R14,R12,12(R13)     RESTORE ALL BUT 13
+       BR      R14                 RETURN 
+*
+         LTORG
+*
+*MAIN SAVE 
+*
+MNS    DS      18F
+*
+*TABLE
+*
+TABLE1 DS      20CL20         TBL 1
+EOT1   DS      F                   EOT1
+TABLE2 DS      20CL20         TBL 2
+EOT2   DS      F                   EOT2
+TABLE3 DS      40CL20         MERGE
+EOT3   DS      F                   END MERGE
+FOUR   DC      F'4'               4 NAMES PER PRINTLINE
+THREE  DC      F'3'               3 NAMES PER PRINTLINE
+*
+*PARM LISTS
+*
+BLIST1   DC    A(TABLE1,EOT1)     BUILD PARMS TBL1
+BLIST2   DC    A(TABLE2,EOT2)     BUILD PARMS TBL2
+BLIST3   DC    A(TABLE1,TABLE2,TABLE3,EOT1,EOT2,EOT3)
+*                                 
+PLIST1   DC    A(TABLE1,EOT1,FOUR)  PRINT PARMS TBL1
+PLIST2   DC    A(TABLE2,EOT2,FOUR)  PRINT PARMS TBL2
+PLIST3   DC    A(TABLE3,EOT3,THREE)  PRINT PARMS MERGE
+*
+*
+************************
+* SUBROUTINE - BUILD *
+************************
+*
+BUILD  CSECT
+       MYSAVE (BUILD,12),BS
+       LM      R2,R3,0(R1)         GET PARMS
+*
+       LA      R4,CARD             POINT TO CARD
+       XREAD   CARD,80             READ CARD
+DO1    CLI     0(R4),C'@'          DO WHILE NOT @
+       BE      ENDDO1
+DO2    CLI     0(R4),C' '          DO WHILE 1ST CHAR NOT BLANK
+       BE      ENDDO2
+       MVC     0(20,R2),0(R4)      MOVE NAME TO TABLE
+       LA      R2,20(R2)           INCR TABLE POINTER
+       LA      R4,20(R4)           INCR CARD POINTER
+       B       DO2                
+ENDDO2 DS      0H                  ENDDO
+       LA      R4,CARD             RESET CARD POINTER
+       XREAD   CARD                READ NEXT CARD
+       B       DO1                   
+ENDDO1 DS      0H                  ENDDO
+*
+       ST      R2,0(R3)            STORE END OF TBL
+       L       R13,4(,R13)         LOAD ADDRESS OF CALLER
+       LM      R14,R12,12(R13)     RESTORE ALL BUT 13
+       BR      R14                 RETURN 
+*
+         LTORG
+*
+BS         DS  18F                 REG SAVE STORAGE
+CARD       DS  CL80                CARD
+           DC  C' '                STOPPER VALUE FOR READ
+*
+************************
+* SUBROUTINE - SORT  *
+************************
+*
+SORT   CSECT
+       MYSAVE (SORT,12),SS
+       LM      R2,R3,0(R1)         GET PARMS
+       L       R3,0(R3)            GET  EOT
+       SR      R6,R6               INIT COUNTER
+*
+DO5    CR      R2,R3               DO WHILE BEGIN < END
+       BNL     ENDDO5
+       LR      R6,R2               LOW  = BEGIN 
+       LA      R7,20(R2)           I  = BEGIN + 20 BYTES
+DO6    CR      R7,R3               DO WHILE(I  NOT > END )
+       BNL     ENDDO6
+*
+IF1    CLC     0(20,R6),0(R7)      IF VAL (LOW) > VAL (I)
+       BNH     ENDIF1
+       LR      R6,R7               LOW  = I
+ENDIF1 DS      0H                  ENDIF
+*
+       LA      R7,20(R7)           INCR TABLE POINTER
+       B       DO6                
+ENDDO6 DS      0H                  ENDDO
+*
+*        SWAP
+*
+       MVC     TEMP,0(R2)          TEMP = BEGIN VAL
+       MVC     0(20,R2),0(R6)      BEGIN = LOW VAL
+       MVC     0(20,R6),TEMP       LOW = TEMP (BEGIN VAL)
+       LA      R2,20(R2)           BEGIN  = BEGIN+ 20 BYTES
+       B       DO5               
+ENDDO5 DS      0H                  ENDDO
+*
+       L       R13,4(,R13)         LOAD ADDRESS OF CALLER
+       LM      R14,R12,12(R13)     RESTORE ALL BUT 13
+       BR      R14                 RETURN 
+*
+       LTORG
+*
+SS     DS      18F                 SAVE STORAGE
+TEMP   DC      CL20' '             TEMP
+*
+*************************
+* SUBROUTINE - MERGE *
+*************************
+*
+MERGE  CSECT
+       MYSAVE (MERGE,12),MS
+       LM      R2,R7,0(R1)         LOAD PARMS
+       L       R5,0(R5)            GET EOT1
+       L       R6,0(R6)            GET EOT2
+DO7    CR      R2,R5               DOWHILE   (NOT EOT1 OR EOT2)
+       BNL     ENDDO7                    
+       CR      R3,R6                         
+       BNL     ENDDO7
+IF2    CLC     0(20,R2),0(R3)      IF TBL1 VAL < TBL2 VAL
+       BNL     ELSE2
+       MVC     0(20,R4),0(R2)      MOVE TBL1 VAL TO MERGE
+       LA      R2,20(R2)           INCR TBL1
+       B       ENDIF2
+ELSE2  DS      0H                  ELSE IF TBL1 VAL > TBL2 VAL
+IF3            CLC   0(20,R2),0(R3)    
+       BNH     ELSE3
+       MVC     0(20,R4),0(R3)      MOVE TBL2 VAL TO MERGE
+       LA      R3,20(R3)           INCR TBL2
+       B       ENDIF3
+ELSE3  DS 0H                       ELSE
+       MVC     0(20,R4),0(R3)      MOVE TBL2 VAL TO MERGE
+       LA      R2,20(R2)           INCR TBL1
+       LA      R3,20(R3)           INCR TBL2
+ENDIF3 DS      0H                  ENDIF
+ENDIF2 DS      0H                  ENDIF
+       LA      R4,20(R4)           INCR MERGE
+       B       DO7                
+ENDDO7 DS      0H                  ENDDO
+*
+* AT END OF 1 TABLE
+*
+DO8    CR      R2,R5               DO WHILE (NOT EOT1)
+       BNL     ENDDO8
+       MVC     0(20,R4),0(R2)      MOVE NAME TO MERGE
+       LA      R2,20(R2)           INCR TBL1
+       LA      R4,20(R4)           INCR MERGE
+       B       DO8                
+ENDDO8 DS      0H                  ENDDO
+DO9    CR      R3,R6               DO WHILE (NOT EOT2)
+       BNL     ENDDO9
+       MVC     0(20,R4),0(R3)      MOVE NAME TO MERGE
+       LA      R3,20(R3)           INCR TBL2
+       LA      R4,20(R4)           INCR MERGE
+       B       DO9                
+ENDDO9 DS      0H                  ENDDO
+       ST      R4,0(R7)            STORE END MERGE
+       L       R13,4(,R13)         LOAD ADDRESS OF CALLER
+       LM      R14,R12,12(R13)     RESTORE ALL BUT 13
+       BR      R14                 RETURN 
+*
+     LTORG
+*
+MS     DS      18F                 REG STORAGE
+*
+************************
+* SUBROUTINE - PRINT *
+************************
+*
+PRINT  CSECT
+       MYSAVE (PRINT,12),PS
+       LM      R2,R4,0(R1)         GET PARMS
+       L       R3,0(R3)            GET EOT
+       L       R4,0(R4)            LOAD LINE#
+       XDECO   R4,LNUM             PUT LINES INTO PLINE
+       XPRNT   PHEADER,38          HEADER MESSAGE  
+       XPRNT   =C' ',1         
+       SR      R6,R6                
+       LA      R6,PLINE+1          POINT TO PLINE
+       SR      R5,R5               INIT  COUNTER
+*
+DO3    CR      R2,R3               DO WHILE NOT LAST TBL @
+       BNL     ENDDO3
+       MVC     0(20,R6),0(R2)      MOVE TBL VAL TO PLINE
+       LA      R6,20(R6)
+       LA      R5,1(R5)            INCR COUNTER
+IF4    CR      R5,R4               IF LIMIT, THEN PRNT
+       BNE     ENDIF4
+       XPRNT   PLINE,133           PRINT LINE
+       LA      R6,PLINE+1          RESET PLINE
+       SR      R5,R5               RESET COUNTER
+       MVI     PLINE,C' '          CLEAR PLINE
+       MVC     PLINE+1(132),PLINE        
+ENDIF4 DS      0H                  ENDIF
+       LA      R2,20(R2)           INCR TBL @
+       B       DO3
+ENDDO3 DS      0H                  ENDDO
+*
+       XPRNT   PLINE,133           PRINT FINAL LINE
+       L       R13,4(,R13)         LOAD ADDRESS OF CALLER
+       LM      R14,R12,12(R13)     RESTORE ALL BUT 13
+       BR      R14                 RETURN 
+*
+          LTORG
+*
+PS     DS      18F
+PLINE  DC      CL1' '              PRINT LINE
+       DC      CL132' ' 
+PHEADER DC     CL1'1'              HEADER MESSAGE
+       DC      CL25'NUMBERS PER LINE:'
+LNUM   DS      CL12
+LIMIT  DS      F
+*
+***********
+* EQUATES *
+***********
+*
+R0     EQU     0
+R1     EQU     1
+R2     EQU     2
+R3     EQU     3
+R4     EQU     4
+R5     EQU     5
+R6     EQU     6
+R7     EQU     7
+R8     EQU     8
+R9     EQU     9
+R10    EQU     10
+R11    EQU     11
+R12    EQU     12
+R13    EQU     13
+R14    EQU     14
+R15    EQU     15
+       END     MAIN
+/*
+//*
+//FT05F001 DD  *
+SKINNER, STINKY     DRAWERS, DREW P.    KRABBAPPLE, EDNA    LOVEJOY, HELEN
+HOGG, IMA           MURDOCK, LANCE      SIDESHOW, MEL       SIMPSON, ABRAHAM
+MARY BAILEY         SMITHERS, WAYLON
+@
+BOUVIER, PATTY      SHORTS, JIM         BATH, ANITA         FLANDERS, NED
+SIMPSON, HOMER J.   TERWILLIGER, BOB
+@
+/*
+//

@@ -1,0 +1,61 @@
+//KC03PE7C JOB ,'Rachel Bastuk',MSGCLASS=H
+//STEP1 EXEC PGM=ASSIST
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+*
+*MAIN
+*
+MAIN   CSECT
+       USING   MAIN,15
+       SR      R3,R3                 ZERO R3
+       ZAP     MNTHT(3),=P'0'        INITIALIZE MONTH
+       ZAP     RENTT(12),=P'0'       INITIALIZE RENTT
+       XREAD   CARD,80               READ FIRST CARD
+DO1    BM      ENDDO1                WHILE MORE RECORDS
+       PACK    MNTHC(2),CARD+1(2)    CONVERT MONTH TO PACKED
+       PACK    RENTC(4),CARD+5(6)    CONVERT RENT TO PACKED
+       MVC     OUTNUM(3),=X'402020'
+       ED      OUTNUM(3),MNTHC       PRINT THE MONTH
+       XPRNT   OUTNUM,3
+       MVC     OUTNUM(7),=X'40202020202020'
+       ED      OUTNUM(7),RENTC
+       XPRNT   OUTNUM,7
+       ED      OUTNUM,MNTHT
+       LA      R3,1(R3)              INCREMENT R3
+       AP      MNTHT(3),MNTHC(2)     ADD TO MONTH TOTAL
+       AP      RENTT(12),RENTC(4)    ADD TO RENT TOTAL
+       XREAD   CARD,80
+       B       DO1
+ENDDO1 DS      0H
+       XPRNT   MNTHT,3
+       XPRNT   RENTT,12
+       BR      14
+       LTORG
+**********
+*MAIN STORAGE
+**********
+R3     EQU     3
+CARD   DS      80C
+INTER  DC      C'*'
+MNTHT  DS      PL3
+RENTT  DS      PL12
+MNTHC  DS      PL2
+RENTC  DS      PL6
+OUTNUM DS      12C
+       END     MAIN
+07  050150
+04  019000
+07  118290
+01  035099
+05  020000
+08  013100
+02  050400
+05  130000
+09  014200
+01  050550
+01  041999
+10  152600
+12  016000
+09  157100
+08  111500

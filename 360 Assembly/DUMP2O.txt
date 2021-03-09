@@ -1,0 +1,126 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 19.45.54 JOB02181 ---- FRIDAY,    21 OCT 2016 ----
+ 19.45.54 JOB02181  IRR010I  USERID KC03PE7  IS ASSIGNED TO THIS JOB.
+ 19.45.54 JOB02181  ICH70001I KC03PE7  LAST ACCESS AT 18:48:38 ON FRIDAY, OCTOBER 21, 2016
+ 19.45.54 JOB02181  $HASP373 KC03PE7C STARTED - INIT 2    - CLASS A        - SYS S0W1
+ 19.45.54 JOB02181  IEC130I FT05F001 DD STATEMENT MISSING
+ 19.45.54 JOB02181  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 19.45.54 JOB02181  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 19.45.54 JOB02181  -KC03PE7C                      00     37 ******    .00     .0    107   0      0      0      0     0
+ 19.45.54 JOB02181  -KC03PE7C ENDED.  NAME-Rachel Bastuk        TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 19.45.54 JOB02181  $HASP395 KC03PE7C ENDED
+0------ JES2 JOB STATISTICS ------
+-  21 OCT 2016 JOB EXECUTION DATE
+-           44 CARDS READ
+-          126 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-            9 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03PE7C JOB ,'Rachel Bastuk',MSGCLASS=H                              JOB02181
+         2 //STEP1 EXEC PGM=ASSIST                                                         
+         3 //STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                                
+         4 //SYSPRINT DD SYSOUT=*                                                          
+         5 //SYSIN DD *           JCL RECORD THAT PRECEDES THE PROGRAM                     
+ ICH70001I KC03PE7  LAST ACCESS AT 18:48:38 ON FRIDAY, OCTOBER 21, 2016
+ IEF236I ALLOC. FOR KC03PE7C STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IEC130I FT05F001 DD STATEMENT MISSING
+ IEF142I KC03PE7C STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03PE7.KC03PE7C.JOB02181.D0000102.?         SYSOUT        
+ IEF285I   KC03PE7.KC03PE7C.JOB02181.D0000101.?         SYSIN         
+ IEF373I STEP/STEP1   /START 2016295.1945
+ IEF032I STEP/STEP1   /STOP  2016295.1945 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   652K  EXT:        0K  SYS:    13016K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03PE7C/START 2016295.1945
+ IEF033I  JOB/KC03PE7C/STOP  2016295.1945 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000000                                1 DUMP2    CSECT                                                                           
+ 000000                                2          USING DUMP2,15                                                                  
+ 000000 4120 F0A0            000A0     3          LA    2,TABLE             LOAD BEGINNING OF TABLE                               
+ 000004 1B33                           4          SR    3,3                 CLEAR R3 FOR COUNTING                                 
+ 000006 E000 F050 0050 00050           5          XREAD DATA,80             READ FIRST CARD                                       
+                                       6 *                                                                                        
+ 00000C 4740 F026            00026     7 LOOP1    BC    B'0100',ENDLOOP1    WHILE MORE ENTRIES                                    
+ 000010 5340 F050            00050     8          XDECI 4,DATA              READ FIRST NUMBER                                     
+ 000014 5043 2000            00000     9          ST    4,0(3,2)            STORE FIRST NUMBER                                    
+ 000018 4130 3004            00004    10          LA    3,4(,3)             INCREMENT R3 BY 4                                     
+ 00001C E000 F050 0050 00050          11          XREAD DATA,80             READ NEXT CARD                                        
+ 000022 47F0 F00C            0000C    12          BC    B'1111',LOOP1       RETURN TO TOP OF LOOP                                 
+                                      13 *                                                                                        
+ 000026 1B33                          14 ENDLOOP1 SR    3,3                 MAKE R3 0                                             
+ 000028 4170 F0A0            000A0    15          LA    7,TABLE             LOAD @TABLE INTO R7                                   
+ 00002C 4150 F118            00118    16          LA    5,TABEND            LOAD @EOT INTO R5                                     
+                                      17 *                                                                                        
+ 000030 1925                          18 LOOP2    CR    2,5                 WHILE @TABLE IS LESS THAN @EOT                        
+ 000032 4780 F04A            0004A    19          BC    B'1000',ENDLOOP2    IF AT END BRANCH TO END                               
+ 000036 5860 2000            00000    20          L     6,0(,2)             LOAD R6 WITH VALUE IN R2                              
+ 00003A 5060 7000            00000    21          ST    6,0(,7)             STORE R7 WITH R6                                      
+ 00003E 5870 7004            00004    22          L     7,4(,7)             ADD 4 TO R7                                           
+ 000042 4120 2004            00004    23          LA    2,4(,2)             INCREMENT R2 BY 4                                     
+ 000046 47F0 F030            00030    24          BC    B'1111',LOOP2                                                             
+                                      25 *                                                                                        
+ 00004A 07FE                          26 ENDLOOP2 BCR   B'1111',14                                                                
+                                      27 *                                                                                        
+                                      28          LTORG                                                                           
+ 000050                               29 DATA     DS    CL80                                                                      
+ 0000A0 FFFFFFFFFFFFFFFF              30 TABLE    DC    30F'-1'                                                                   
+ 000118                               31 TABEND   DS    0X                                                                        
+                                      32          END   DUMP2                                                                     
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:    1664 HIGH:     484 LEAVING:  491420 FREE BYTES. AVERAGE:       65 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.000 SECS,    33000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+0*** EXECUTION TIME =    0.000 SECS.        54 INSTRUCTIONS EXECUTED -    54000 INSTRUCTIONS/SEC ***                              
+1 ASSIST COMPLETION DUMP                                                                                                          
+0PSW AT ABEND FFC50006 9000003E       COMPLETION CODE   SYSTEM = 0C6 SPECIFICATION                                                
+0** TRACE OF INSTRUCTIONS JUST BEFORE TERMINATION: PSW BITS SHOWN ARE THOSE BEFORE CORRESPONDING INSTRUCTION DECODED ***          
+0  IM LOCATION    INSTRUCTION :  IM = PSW BITS 32-39(ILC,CC,MASK) BEFORE INSTRUCTION EXECUTED AT PROGRAM LOCATION SHOWN           
+0  10  000032     4780 F04A                                                                                                       
+0  90  000036     5860 2000                                                                                                       
+0  90  00003A     5060 7000                                                                                                       
+0  90  00003E     5870 7004                                                                                                       
+0  90  000042     4120 2004                                                                                                       
+0  90  000046     47F0 F030                                                                                                       
+0  90  000030     1925                                                                                                            
+0  50  000032     4780 F04A                                                                                                       
+0  90  000036     5860 2000                                                                                                       
+0  90  00003A     5060 7000       <-- LAST INSTRUCTION DONE - PROBABLE CAUSE OF TERMINATION                                       
+0                                                                                                                                 
+-** TRACE OF LAST 10 BRANCH INSTRUCTIONS EXECUTED: PSW BITS SHOWN ARE THOSE BEFORE CORRESPONDING INSTRUCTION DECODED ***          
+0  IM LOCATION    INSTRUCTION :  IM = PSW BITS 32-39(ILC,CC,MASK) BEFORE INSTRUCTION EXECUTED AT PROGRAM LOCATION SHOWN           
+0  00  000022     47F0 F00C                                                                                                       
+0  80  000022     47F0 F00C                                                                                                       
+0  80  000022     47F0 F00C                                                                                                       
+0  80  000022     47F0 F00C                                                                                                       
+0  80  000022     47F0 F00C                                                                                                       
+0  90  000022     47F0 F00C                                                                                                       
+0  90  00000C     4740 F026                                                                                                       
+0  90  000046     47F0 F030                                                                                                       
+0 REGS 0-7      F4F4F4F4    00000053    000000A4    00000000    000003DB    00000118    00000001    00000001                      
+  REGS 8-15     F4F4F4F4    F4F4F4F4    F4F4F4F4    F4F4F4F4    F4F4F4F4    00000118    FFFE7960    00000000                      
+0 FLTR 0-6      F4F4F4F4F4F4F4F4        F4F4F4F4F4F4F4F4        F4F4F4F4F4F4F4F4        F4F4F4F4F4F4F4F4                          
+1 USER STORAGE                                                                                                                    
+0                             CORE ADDRESSES SPECIFIED-     000000 TO 000260                                                      
+ 000000   4120F0A0 1B33E000 F0500050 4740F026    5340F050 50432000 41303004 E000F050   *..0.....0.... 0.. 0...........0.*         
+ 000020   005047F0 F00C1B33 4170F0A0 4150F118    19254780 F04A5860 20005060 70005870   *...00.....0...1.....0...........*         
+ 000040   70044120 200447F0 F03007FE F5F5F5F5    F9F8F740 F6F5F440 F3F2F140 40404040   *.......00...5555987 654 321     *         
+ 000060   40404040 40404040 40404040 40404040    40404040 40404040 40404040 40404040   *                                *         
+   LINES    000080-000080    SAME AS ABOVE                                                                                        
+ 0000A0   00000000 00000001 00000032 00000020    0000007B 000003DB FFFFFFFF FFFFFFFF   *................................*         
+ 0000C0   FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF    FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF   *................................*         
+   LINES    0000E0-0000E0    SAME AS ABOVE                                                                                        
+ 000100   FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF    FFFFFFFF FFFFFFFF F5F5F5F5 00000000   *........................5555....*         
+ 000120   F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5   *55555555555555555555555555555555*         
+   LINES    000140-000220    SAME AS ABOVE                                                                                        
+0                                                                                                                                 

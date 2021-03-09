@@ -1,0 +1,289 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 00.06.32 JOB00625 ---- FRIDAY,    28 OCT 2016 ----
+ 00.06.32 JOB00625  IRR010I  USERID KC03PE7  IS ASSIGNED TO THIS JOB.
+ 00.06.32 JOB00625  ICH70001I KC03PE7  LAST ACCESS AT 00:06:26 ON FRIDAY, OCTOBER 28, 2016
+ 00.06.32 JOB00625  $HASP373 KC03PE7C STARTED - INIT 2    - CLASS A        - SYS S0W1
+ 00.06.32 JOB00625  IEC130I FT05F001 DD STATEMENT MISSING
+ 00.06.32 JOB00625  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 00.06.32 JOB00625  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 00.06.32 JOB00625  -KC03PE7C                      00     42 ******    .00     .0    133   0      0      0      0     0
+ 00.06.33 JOB00625  -KC03PE7C ENDED.  NAME-Rachel Bastuk        TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 00.06.33 JOB00625  $HASP395 KC03PE7C ENDED
+0------ JES2 JOB STATISTICS ------
+-  28 OCT 2016 JOB EXECUTION DATE
+-          235 CARDS READ
+-          289 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           21 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03PE7C JOB ,'Rachel Bastuk',MSGCLASS=H                              JOB00625
+         2 //STEP1 EXEC PGM=ASSIST                                                         
+         3 //STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                                
+         4 //SYSPRINT DD SYSOUT=*                                                          
+         5 //SYSIN DD *                                                                    
+ ICH70001I KC03PE7  LAST ACCESS AT 00:06:26 ON FRIDAY, OCTOBER 28, 2016
+ IEF236I ALLOC. FOR KC03PE7C STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IEC130I FT05F001 DD STATEMENT MISSING
+ IEF142I KC03PE7C STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03PE7.KC03PE7C.JOB00625.D0000102.?         SYSOUT        
+ IEF285I   KC03PE7.KC03PE7C.JOB00625.D0000101.?         SYSIN         
+ IEF373I STEP/STEP1   /START 2016302.0006
+ IEF032I STEP/STEP1   /STOP  2016302.0006 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   268K  EXT:        0K  SYS:    11440K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03PE7C/START 2016302.0006
+ IEF033I  JOB/KC03PE7C/STOP  2016302.0006 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000000                                1 ASSN6  CSECT                                                                             
+ 000000                                2        USING   ASSN6,15                                                                  
+ 000000 4110 F678            00678     3        LA      R1,PLIST1           LOAD 1ST PARAMETER LIST                               
+ 000004 45D0 F6B8            006B8     4        BAL     R13,BUILD           BUILD FIRST TABLE                                     
+ 000008 4110 F6A0            006A0     5        LA      R1,PLIST4           LOAD FOR PRINT                                        
+ 00000C 45D0 F79A            0079A     6        BAL     R13,PRINT           PRINT TABLE 1                                         
+ 000010 4110 F678            00678     7        LA      R1,PLIST1                                                                 
+ 000014 45D0 F8C4            008C4     8        BAL     R13,SWAP                                                                  
+ 000018 4110 F6A0            006A0     9        LA      R1,PLIST4                                                                 
+ 00001C 45D0 F79A            0079A    10        BAL     R13,PRINT                                                                 
+ 000020 07FE                          11        BR      14                                                                        
+                                      12        LTORG                                                                             
+                                      13 *************                                                                            
+                                      14 *STORAGE                                                                                 
+                                      15 *************                                                                            
+ 000028                               16 TABLE1 DS      20CL20                                                                    
+ 0001B8 00000028                      17 EOT1   DC      A(TABLE1)                                                                 
+ 0001BC                               18 TABLE2 DS      20CL20                                                                    
+ 00034C 000001BC                      19 EOT2   DC      A(TABLE2)                                                                 
+ 000350                               20 MTABLE DS      40CL20                                                                    
+ 000670 00000350                      21 MEOT   DC      A(MTABLE)                                                                 
+ 000674 00000004                      22 NUM1   DC      F'4'                                                                      
+                                      23 *PLISTS                                                                                  
+ 000678 00000028000001B8              24 PLIST1 DC      A(TABLE1,EOT1)                                                            
+ 000680 000001BC0000034C              25 PLIST2 DC      A(TABLE2,EOT2)                                                            
+ 000688 00000028000001B8              26 PLIST3 DC      A(TABLE1,EOT1,TABLE2,EOT2,MTABLE,MEOT)                                    
+ 0006A0 00000028000001B8              27 PLIST4 DC      A(TABLE1,EOT1,NUM1)                                                       
+ 0006AC 000001BC0000034C              28 PLIST5 DC      A(TABLE2,EOT2,NUM1)                                                       
+                                      29 **************                                                                           
+                                      30 *BUILD                                                                                   
+                                      31 **************                                                                           
+ 0006B8                               32 BUILD  DS      0H                                                                        
+ 0006B8 900F F708            00708    33        STM     R0,R15,BSAVE        SAVE REGISTERS                                        
+ 0006BC 9823 1000            00000    34        LM      R2,R3,0(R1)         LOAD PARAMETER LIST                                   
+                                      35 *                                  R2 - @TABLE                                           
+                                      36 *                                  R3 - @EOT                                             
+ 0006C0 E000 F748 0050 00748          37        XREAD   CARD,80             READ FIRST CARD                                       
+ 0006C6 4740 F6FE            006FE    38 DO1    BM      ENDDO1              WHILE MORE RECORDS                                    
+ 0006CA 4140 F748            00748    39        LA      R4,CARD             LOAD ADDRESS FOR CARD POINTER                         
+ 0006CE 957C 4000      00000          40        CLI     0(R4),C'@'          IF FIRST C IS @                                       
+ 0006D2 4780 F6FE            006FE    41        BE      ENDDO1              GO TO END                                             
+ 0006D6 9540 4000      00000          42 DO2    CLI     0(R4),C' '          CHECK FOR A SPACE                                     
+ 0006DA 4780 F6F4            006F4    43        BE      ENDDO2              IF THERE IS, BRANCH                                   
+ 0006DE D212 2000 4000 00000 00000    44        MVC     0(19,R2),0(R4)                                                            
+ 0006E4 4144 0014            00014    45        LA      R4,20(R4)           INCREMENT CARD POINTER                                
+ 0006E8 4122 0014            00014    46        LA      R2,20(R2)           INCREMENT TABLE POINTER                               
+ 0006EC 9540 2000      00000          47        CLI     0(R2),C' '          CHECK NEXT FOR SPACE                                  
+ 0006F0 47F0 F6D6            006D6    48        B       DO2                                                                       
+ 0006F4                               49 ENDDO2 DS      0H                                                                        
+ 0006F4 E000 F748 0050 00748          50        XREAD   CARD,80             READ NEXT CARD                                        
+ 0006FA 47F0 F6C6            006C6    51        B       DO1                 LABEL                                                 
+ 0006FE                               52 ENDDO1 DS      0H                  LABEL                                                 
+1                                                                                                               PAGE    2         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 0006FE 5023 0000            00000    53        ST      R2,0(R3)            STORE END OF TABLE IN EOT                             
+ 000702 980F F708            00708    54        LM      R0,R15,BSAVE        RESTORE REGISTERS                                     
+ 000706 07FD                          55        BR      R13                                                                       
+                                      56        LTORG                                                                             
+                                      57 ***************                                                                          
+                                      58 *BUILD STORAGE                                                                           
+                                      59 ***************                                                                          
+ 000708                               60 BSAVE  DS      16F                                                                       
+ 000748                               61 CARD   DS      80C                                                                       
+ 000798 40                            62 INTERC DC      C' '                                                                      
+                                      63 ***************                                                                          
+                                      64 *PRINT                                                                                   
+                                      65 ***************                                                                          
+ 00079A                               66 PRINT  DS      0H                                                                        
+ 00079A 900F F800            00800    67        STM     R0,R15,PSAVE                                                              
+ 00079E 9824 1000            00000    68        LM      R2,R4,0(R1)         LOAD PARAMETER LIST                                   
+                                      69 *                                  R2 - @TABLE                                           
+                                      70 *                                  R3 - @EOT                                             
+                                      71 *                                  R4 - @NUM                                             
+ 0007A2 5833 0000            00000    72        L       R3,0(R3)            LOAD WITH ACTUAL END OF TABLE                         
+ 0007A6 5844 0000            00000    73        L       R4,0(R4)            LOAD NUM VALUE                                        
+ 0007AA 4150 F841            00841    74        LA      R5,PLINE+1                                                                
+ 0007AE 1B66                          75        SR      R6,R6               INCREMENT COUNTER                                     
+ 0007B0 1923                          76        CR      R2,R3                                                                     
+ 0007B2 47B0 F7EA            007EA    77 DO3    BNL     ENDDO3                                                                    
+ 0007B6 D212 5000 2000 00000 00000    78        MVC     0(19,R5),0(R2)     ADD TO PLINE                                           
+ 0007BC 4155 0014            00014    79        LA      R5,20(R5)          INCREMENT PLINE                                        
+ 0007C0 4166 0001            00001    80        LA      R6,1(R6)           INCREMENT COUNTER                                      
+ 0007C4 4122 0014            00014    81        LA      R2,20(R2)          INCREMENT TABLE POINTER                                
+ 0007C8 1964                          82        CR      R6,R4              CHECK THE COUNT                                        
+ 0007CA 4770 F7E4            007E4    83 IF1    BNZ     ENDIF1                                                                    
+ 0007CE E020 F840 0084 00840          84        XPRNT   PLINE,132          PRINT                                                  
+ 0007D4 4150 F841            00841    85        LA      R5,PLINE+1         RESET PLINE POINTER                                    
+ 0007D8 1B66                          86        SR      R6,R6              RESET COUNTER                                          
+ 0007DA 9240 F840      00840          87        MVI     PLINE,C' '         CLEAR PLINE                                            
+ 0007DE D282 F841 F840 00841 00840    88        MVC     PLINE+1(131),PLINE                                                        
+ 0007E4                               89 ENDIF1 DS      0H                                                                        
+ 0007E4 1923                          90        CR      R2,R3               CHECK IF AT END                                       
+ 0007E6 47F0 F7B2            007B2    91        B       DO3                 BRANCH BACK TO DO3                                    
+ 0007EA                               92 ENDDO3 DS      0H                                                                        
+ 0007EA E020 F840 0084 00840          93        XPRNT   PLINE,132           LEFTOVER PRINTING                                     
+ 0007F0 9240 F840      00840          94        MVI     PLINE,C' '          CLEAR PLINE                                           
+ 0007F4 D282 F841 F840 00841 00840    95        MVC     PLINE+1(131),PLINE                                                        
+ 0007FA 980F F800            00800    96        LM      R0,R15,PSAVE        RESTORE REGISTERS                                     
+ 0007FE 07FD                          97        BR      R13                                                                       
+                                      98        LTORG                                                                             
+                                      99 ***************                                                                          
+                                     100 *PRINT STORAGE                                                                           
+                                     101 ***************                                                                          
+ 000800                              102 PSAVE  DS      16F                                                                       
+ 000840 4040404040404040             103 PLINE  DC      CL132' '                                                                  
+                                     104 **********************                                                                   
+                                     105 ***SWAPPING***********                                                                   
+                                     106 **********************                                                                   
+                                     107 *SWAPPING A TABLE                                                                        
+                                     108 *PARAMETERS: TABLE, END OF TABLE                                                         
+                                     109 *OUTPUT:     SORTED TABLE                                                                
+1                                                                                                               PAGE    3         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     110 *REGISTERS:  R2 HOLDS TABLE                                                              
+                                     111 *            R3 HOLDS EOT                                                                
+                                     112 *            R5 HOLDS @I                                                                 
+                                     113 *            R6 HOLDS @I BEFORE INCREMENT                                                
+                                     114 *                                                                                        
+ 0008C4                              115 SWAP   DS      0H                                                                        
+ 0008C4 900F F918            00918   116        STM     R0,R15,SSAVE    SAVE REGISTERS                                            
+ 0008C8 9823 1000            00000   117        LM      R2,R3,0(R1)     LOAD THE PLIST                                            
+                                     118 *                              R2 - @TABLE                                               
+                                     119 *                              R3 - @EOT                                                 
+ 0008CC 5833 0000            00000   120        L       R3,0(R3)        GET ACTUAL END OF TABLE                                   
+ 0008D0 1923                         121 DO4    CR      R2,R3                                                                     
+ 0008D2 47B0 F90E            0090E   122        BNL     ENDDO4                                                                    
+ 0008D6 4152 0014            00014   123        LA      R5,20(R2)       LOAD REGISTER 5 WITH NEXT VALUE                           
+ 0008DA 1953                         124 DO5    CR      R5,R3           WHILE NOT AT END                                          
+ 0008DC 47B0 F8F4            008F4   125        BNL     ENDDO5                                                                    
+ 0008E0 D512 5000 2000 00000 00000   126 IF2    CLC     0(19,R5),0(R2)  CHECK SECOND NAME AGAINST FIRST NAME                      
+ 0008E6 4720 F8EC            008EC   127        BH      ENDIF2          IF NOT LESS                                               
+ 0008EA 1865                         128        LR      R6,R5           R6 HOLDS THE LOW LOCATION                                 
+ 0008EC                              129 ENDIF2 DS      0H                                                                        
+ 0008EC 4155 0014            00014   130        LA      R5,20(R5)       R5 + 1                                                    
+ 0008F0 47F0 F8DA            008DA   131        B       DO5                                                                       
+ 0008F4                              132 ENDDO5 DS      0H                                                                        
+ 0008F4 D212 F958 2000 00958 00000   133        MVC     TEMP(19),0(R2)  SWAP                                                      
+ 0008FA D212 2000 6000 00000 00000   134        MVC     0(19,R2),0(R6)                                                            
+ 000900 D212 6000 F958 00000 00958   135        MVC     0(19,R6),TEMP                                                             
+ 000906 4122 0014            00014   136        LA      R2,20(R2)      INCREMENT BEGINNING                                        
+ 00090A 47F0 F8D0            008D0   137        B       DO4            BRANCH BACK                                                
+ 00090E                              138 ENDDO4 DS      0H                                                                        
+ 00090E 980F F918            00918   139        LM      R0,R15,SSAVE                                                              
+ 000912 07FD                         140        BR      13                                                                        
+                                     141        LTORG                                                                             
+                                     142 ***********************                                                                  
+                                     143 *SWAP STORAGE**********                                                                  
+                                     144 ***********************                                                                  
+ 000918                              145 SSAVE  DS      16F                                                                       
+ 000958                              146 TEMP   DS      20C                                                                       
+                                     147 ***************                                                                          
+                                     148 *MERGE                                                                                   
+                                     149 ***************                                                                          
+ 00096C                              150 MERGE  DS      0H                                                                        
+ 00096C 900F FA00            00A00   151        STM     R0,R15,MSAVE                                                              
+ 000970 9827 1000            00000   152        LM      R2,R7,0(R1)         LOAD PARAMETERS                                       
+                                     153 *                                  R2 - @TABLE1                                          
+                                     154 *                                  R3 - @EOT1                                            
+                                     155 *                                  R4 - @TABLE2                                          
+                                     156 *                                  R5 - @EOT2                                            
+                                     157 *                                  R6 - @MTABLE                                          
+                                     158 *                                  R7 - @MEOT                                            
+ 000974 5833 0000            00000   159        L       R3,0(R3)        ACTUAL END OF TABLE 1                                     
+ 000978 5855 0000            00000   160        L       R5,0(R5)        ACTUAL END OF TABLE 2                                     
+ 00097C 1923                         161 DO6    CR      R2,R3           WHILE NOT AT END OF EITHER TABLE                          
+ 00097E 47B0 F9D0            009D0   162        BNL     ENDDO6                                                                    
+ 000982 1945                         163 DO7    CR      R4,R5                                                                     
+ 000984 47B0 F9CC            009CC   164        BNL     ENDDO7                                                                    
+ 000988 D512 2000 4000 00000 00000   165 IF3    CLC     0(19,R2),0(R4)  IF TAB1KEY < TAB2KEY                                      
+ 00098E 47B0 F99C            0099C   166        BNL     ENDIF3                                                                    
+1                                                                                                               PAGE    4         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000992 D212 6000 2000 00000 00000   167        MVC     0(19,R6),0(R2)  PUT TAB1 IN MERGE                                         
+ 000998 4122 0014            00014   168        LA      R2,20(R2)       INCREMENT TAB1                                            
+ 00099C                              169 ENDIF3 DS      0H                                                                        
+ 00099C D512 2000 4000 00000 00000   170 IF4    CLC     0(19,R2),0(R4)  IF TAB1KEY > TAB2KEY                                      
+ 0009A2 47D0 F9B0            009B0   171        BNH     ENDIF4                                                                    
+ 0009A6 D212 6000 4000 00000 00000   172        MVC     0(19,R6),0(R4) PUT TAB2 IN MERGE                                          
+ 0009AC 4144 0014            00014   173        LA      R4,20(R4)                                                                 
+ 0009B0                              174 ENDIF4 DS      0H                                                                        
+ 0009B0 D512 2000 4000 00000 00000   175 IF5    CLC     0(19,R2),0(R4)  IF TAB1KEY > TAB2KEY                                      
+ 0009B6 4770 F9C8            009C8   176        BNZ     ENDIF5                                                                    
+ 0009BA D212 6000 2000 00000 00000   177        MVC     0(19,R6),0(R2)  PUT TAB1 IN MERGE                                         
+ 0009C0 4122 0014            00014   178        LA      R2,20(R2)       INCREMENT TAB1                                            
+ 0009C4 4144 0014            00014   179        LA      R4,20(R4)       INCREMENT TAB2                                            
+ 0009C8                              180 ENDIF5 DS      0H                                                                        
+ 0009C8 47F0 F982            00982   181        B       DO7                                                                       
+ 0009CC                              182 ENDDO7 DS      0H                                                                        
+ 0009CC 47F0 F97C            0097C   183        B       DO6                                                                       
+ 0009D0                              184 ENDDO6 DS      0H                                                                        
+                                     185 ****                                                                                     
+                                     186 *CLEANUP MERGING                                                                         
+                                     187 ****                                                                                     
+ 0009D0 1923                         188 DO8    CR      R2,R3                                                                     
+ 0009D2 47B0 F9E4            009E4   189        BNL     ENDDO8                                                                    
+ 0009D6 D212 6000 2000 00000 00000   190        MVC     0(19,R6),0(R2)  PUT TAB1 IN MERGE                                         
+ 0009DC 4122 0014            00014   191        LA      R2,20(R2)       INCREMENT TAB1                                            
+ 0009E0 47F0 F9D0            009D0   192        B       DO8                                                                       
+ 0009E4                              193 ENDDO8 DS      0H                                                                        
+ 0009E4 1923                         194 DO9    CR      R2,R3                                                                     
+ 0009E6 47B0 F9F8            009F8   195        BNL     ENDDO9                                                                    
+ 0009EA D212 6000 4000 00000 00000   196        MVC     0(19,R6),0(R4)  PUT TAB2 IN MERGE                                         
+ 0009F0 4124 0014            00014   197        LA      R2,20(R4)       INCREMENT TAB2                                            
+ 0009F4 47F0 F9E4            009E4   198        B       DO9                                                                       
+ 0009F8                              199 ENDDO9 DS      0H                                                                        
+ 0009F8 07FD                         200        BR      13                                                                        
+                                     201        LTORG                                                                             
+                                     202 ***************                                                                          
+                                     203 *MERGE STORAGE                                                                           
+                                     204 ***************                                                                          
+ 000A00                              205 MSAVE  DS      16F                                                                       
+                                     206 *                                                                                        
+ 000000                              207 R0     EQU     0                                                                         
+ 000001                              208 R1     EQU     1                                                                         
+ 000002                              209 R2     EQU     2                                                                         
+ 000003                              210 R3     EQU     3                                                                         
+ 000004                              211 R4     EQU     4                                                                         
+ 000005                              212 R5     EQU     5                                                                         
+ 000006                              213 R6     EQU     6                                                                         
+ 000007                              214 R7     EQU     7                                                                         
+ 000008                              215 R8     EQU     8                                                                         
+ 000009                              216 R9     EQU     9                                                                         
+ 00000A                              217 R10    EQU     10                                                                        
+ 00000B                              218 R11    EQU     11                                                                        
+ 00000C                              219 R12    EQU     12                                                                        
+ 00000D                              220 R13    EQU     13                                                                        
+ 00000E                              221 R14    EQU     14                                                                        
+ 00000F                              222 R15    EQU     15                                                                        
+                                     223        END     ASSN6                                                                     
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+1*** DYNAMIC CORE AREA USED:  LOW:   10776 HIGH:    1656 LEAVING:  481136 FREE BYTES. AVERAGE:       55 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.001 SECS,   224000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+ SKINNER,STINKY      DRAWERS, DREW P.    KRABBAPPLE, EDNA    LOVEJOY, HELEN                                                       
+ HOGG, IMA           MURDOCK, LANCE      SIDESHOW, MEL       SIMPSON, ABRAHAM                                                     
+ MARY BAILEY         SMITHERS, WAYLON                                                                                             
+ MARY BAILEY         SKINNER,STINKY      DRAWERS, DREW P.    KRABBAPPLE, EDNA                                                     
+ LOVEJOY, HELEN      HOGG, IMA           MURDOCK, LANCE      SIDESHOW, MEL                                                        
+ SMITHERS, WAYLON    SIMPSON, ABRAHAM                                                                                             
+0*** EXECUTION TIME =    0.000 SECS.       731 INSTRUCTIONS EXECUTED -   731000 INSTRUCTIONS/SEC ***                              
+0*** FIRST CARD NOT READ: BOUVIER, PATTY      SHORTS, JIM         BATH, ANITA         FLANDERS, NED                               
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                

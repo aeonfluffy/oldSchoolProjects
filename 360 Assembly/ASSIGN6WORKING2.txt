@@ -1,0 +1,142 @@
+//KC03PE7C JOB ,'Rachel Bastuk',MSGCLASS=H
+//STEP1 EXEC PGM=ASSIST
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+ASSN6  CSECT
+       USING   ASSN6,15
+       LA      R1,PLIST1           LOAD 1ST PARAMETER LIST
+       BAL     R13,BUILD           BUILD FIRST TABLE
+*       XDUMP   TABLE1,400
+       LA      R1,PLIST4
+       BAL     R13,PRINT
+       BR      14
+       LTORG
+*************
+*STORAGE
+*************
+TABLE1 DS      20CL20
+EOT1   DC      A(TABLE1)
+TABLE2 DS      20CL20
+EOT2   DC      A(TABLE2)
+MTABLE DS      40CL20
+MEOT   DC      A(MTABLE)
+NUM1   DC      F'4'
+*PLISTS
+PLIST1 DC      A(TABLE1,EOT1)
+PLIST2 DC      A(TABLE2,EOT2)
+PLIST3 DC      A(TABLE1,EOT1,TABLE2,EOT2,MTABLE,MEOT)
+PLIST4 DC      A(TABLE1,EOT1,NUM1)
+**************
+*BUILD
+**************
+BUILD  DS      0H
+       STM     R0,R15,BSAVE        SAVE REGISTERS
+       LM      R2,R3,0(R1)         LOAD PARAMETER LIST
+*                                  R2 - @TABLE
+*                                  R3 - @EOT
+       XREAD   CARD,80             READ FIRST CARD
+DO1    BM      ENDDO1              WHILE MORE RECORDS
+       LA      R4,CARD             POINTER FOR CARD
+       MVC     HOLDER(20),0(R4)    MOVE
+       CLI     HOLDER,C'@'         IF FIRST C IS @
+       BE      ENDDO1              GO TO END
+DO2    CLI     HOLDER,C' '         CHECK FOR A SPACE
+       BE      ENDDO2              IF THERE IS, BRANCH
+       MVC     0(20,R2),HOLDER     PLACE INTO TABLE
+       LA      R4,20(R4)           INCREMENT CARD POINTER
+       LA      R2,20(R2)           INCREMENT TABLE POINTER
+       MVC     HOLDER(20),0(R4)
+       CLI     HOLDER,C' '         CHECK NEXT FOR SPACE
+       B       DO2
+ENDDO2 DS      0H
+       XREAD   CARD,80             READ NEXT CARD
+       B       DO1                 LABEL
+ENDDO1 DS      0H                  LABEL
+       ST      R2,0(R3)            STORE END OF TABLE IN EOT 
+       LM      R0,R15,BSAVE        RESTORE REGISTERS
+       BR      R13
+       LTORG
+***************
+*BUILD STORAGE
+***************
+BSAVE  DS      16F
+CARD   DS      80C
+HOLDER DS      20C
+***************
+*PRINT
+***************
+PRINT  DS      0H
+       STM     R0,R15,PSAVE
+       LM      R2,R4,0(R1)         LOAD PARAMETER LIST
+*                                  R2 - @TABLE
+*                                  R3 - @EOT
+*                                  R4 - @NUM
+       L       R3,0(R3)            LOAD WITH ACTUAL END OF TABLE
+       L       R4,0(R4)            LOAD NUM VALUE
+       LA      R5,PLINE
+       SR      R6,R6               INCREMENT COUNTER
+       CR      R2,R3
+DO3    BNL     ENDDO3
+       L       R7,0(R2)           LOAD WORD
+       MVC     PLINE(20),R7       ADD TO PLINE
+       LA      R5,20(R5)          INCREMENT PLINE
+       LA      R6,1(R6)           INCREMENT COUNTER
+       CR      R6,R4              CHECK THE COUNT
+IF1    BNZ     ENDIF1
+       XPRNT   PLINE,132          PRINT
+       LA      R5,PLINE           RESET PLINE POINTER
+       SR      R6,R6              RESET COUNTER
+       MVI     PLINE,C' '         CLEAR PLINE
+       MVC     PLINE+1(131),PLINE
+ENDIF1 DS      0H     
+       LA      R2,20(R2)           INCREMENT TABLE POINTER
+       CR      R2,R3               CHECK IF AT END
+       B       DO3                 BRANCH BACK TO DO3
+ENDDO3 DS      0H
+       LM      R0,R15,PSAVE        RESTORE REGISTERS
+       BR      R13
+       LTORG
+***************
+*PRINT STORAGE
+***************
+PSAVE  DS      16F
+PLINE  DC      CL132' '
+***************
+*MERGE
+***************
+*MERGE  DS      0H
+*       STM     R0,R15,MSAVE
+*	   LM      R2,R7,0(R1)         LOAD PARAMETERS
+*                                  R2 - @TABLE1
+*                                  R3 - @EOT1
+*                                  R4 - @TABLE2
+*                                  R5 - @EOT2
+*                                  R6 - @MTABLE
+*                                  R7 - @MEOT
+***************
+*MERGE STORAGE
+***************
+*MSAVE  DS      16F
+*
+R0     EQU     0
+R1     EQU     1
+R2     EQU     2
+R3     EQU     3
+R4     EQU     4
+R5     EQU     5
+R6     EQU     6
+R7     EQU     7
+R8     EQU     8
+R9     EQU     9
+R10    EQU     10
+R11    EQU     11
+R12    EQU     12
+R13    EQU     13
+R14    EQU     14
+R15    EQU     15
+       END     ASSN6
+SKINNER,STINKY      DRAWERS, DREW P.    KRABBAPPLE, EDNA    LOVEJOY, HELEN
+HOGG, IMA           MURDOCK, LANCE      SIDESHOW, MEL       SIMPSON, ABRAHAM
+MARY BAILEY         SMITHERS, WAYLON
+@

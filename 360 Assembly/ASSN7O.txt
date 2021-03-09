@@ -1,0 +1,207 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 00.57.39 JOB01571 ---- FRIDAY,    04 NOV 2016 ----
+ 00.57.39 JOB01571  IRR010I  USERID KC03PE7  IS ASSIGNED TO THIS JOB.
+ 00.57.39 JOB01571  ICH70001I KC03PE7  LAST ACCESS AT 00:57:00 ON FRIDAY, NOVEMBER 4, 2016
+ 00.57.39 JOB01571  $HASP373 KC03PE7C STARTED - INIT 2    - CLASS A        - SYS S0W1
+ 00.57.39 JOB01571  IEC130I FT05F001 DD STATEMENT MISSING
+ 00.57.39 JOB01571  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 00.57.39 JOB01571  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 00.57.39 JOB01571  -KC03PE7C                      00     38 ******    .00     .0    122   0      0      0      0     0
+ 00.57.39 JOB01571  -KC03PE7C ENDED.  NAME-Rachel Bastuk        TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 00.57.39 JOB01571  $HASP395 KC03PE7C ENDED
+0------ JES2 JOB STATISTICS ------
+-  04 NOV 2016 JOB EXECUTION DATE
+-          143 CARDS READ
+-          207 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           14 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03PE7C JOB ,'Rachel Bastuk',MSGCLASS=H                              JOB01571
+         2 //STEP1 EXEC PGM=ASSIST                                                         
+         3 //STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                                
+         4 //SYSPRINT DD SYSOUT=*                                                          
+         5 //SYSIN DD *                                                                    
+ ICH70001I KC03PE7  LAST ACCESS AT 00:57:00 ON FRIDAY, NOVEMBER 4, 2016
+ IEF236I ALLOC. FOR KC03PE7C STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IEC130I FT05F001 DD STATEMENT MISSING
+ IEF142I KC03PE7C STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03PE7.KC03PE7C.JOB01571.D0000102.?         SYSOUT        
+ IEF285I   KC03PE7.KC03PE7C.JOB01571.D0000101.?         SYSIN         
+ IEF373I STEP/STEP1   /START 2016309.0057
+ IEF032I STEP/STEP1   /STOP  2016309.0057 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   268K  EXT:        0K  SYS:    11556K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03PE7C/START 2016309.0057
+ IEF033I  JOB/KC03PE7C/STOP  2016309.0057 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 *RACHEL BASTUK                                                                           
+                                       2 *CSCI 360                                                                                
+                                       3 *ASSIGNMENT 7                                                                            
+                                       4 *SUMMARY:                                                                                
+                                       5 *THIS PROGRAM CALCULATES THE TOTAL RENT                                                  
+                                       6 *AND TOTAL MONTHS DUE FOR TENETS IN AN APARTMENT                                         
+                                       7 *IT WILL THEN PRINT OUT A WORTHWHILE SUMMARY                                             
+                                       8 *INPUT:                                                                                  
+                                       9 *DATA THAT INCLUDES MONTHS STARTING AT COLUMN 1                                          
+                                      10 *AND RENT THAT STARTS IN COLUMN 4                                                        
+                                      11 *PSEUDOCODE:                                                                             
+                                      12 *READ IN FIRST LINE                                                                      
+                                      13 *   WHILE NOT AT END                                                                     
+                                      14 *     PRINT THE FIRST LINE AND ADD TO RUNNING TOTALS-                                    
+                                      15 *                                FOR MONTHS AND RENT                                     
+                                      16 *     READ IN NEXT LINE                                                                  
+                                      17 *   PRINT TOTAL MONTH AND TOTAL RENT                                                     
+                                      18 *   PRINT AVERAGE MONTHS AND AVERAGE RENT                                                
+                                      19 *                                                                                        
+                                      20 *REGISTERS USED:                                                                         
+                                      21 *R1 TO KEEP TRACK OF THE SIGNIFICANCE STARTER FOR $                                      
+                                      22 *                                                                                        
+                                      23 *                                                                                        
+                                      24 *MAIN                                                                                    
+                                      25 *                                                                                        
+ 000000                               26 MAIN   CSECT                                                                             
+ 000000                               27        USING   MAIN,15                                                                   
+ 000000 F810 F57D F128 0057D 00128    28        ZAP     COUNT(2),=P'0'                                                            
+ 000006 F820 F17B F128 0017B 00128    29        ZAP     MNTHT(3),=P'0'        INITIALIZE MONTH                                    
+ 00000C F860 F17E F128 0017E 00128    30        ZAP     RENTT(7),=P'0'        INITIALIZE RENTT                                    
+ 000012 E020 F252 0084 00252          31        XPRNT   COLHE,132                                                                 
+ 000018 E000 F12A 0050 0012A          32        XREAD   CARD,80               READ FIRST CARD                                     
+ 00001E 4740 F072            00072    33 DO1    BM      ENDDO1                WHILE MORE RECORDS                                  
+ 000022 F211 F185 F12A 00185 0012A    34        PACK    MNTHC(2),CARD(2)      CONVERT MONTH TO PACKED                             
+ 000028 F235 F187 F12E 00187 0012E    35        PACK    RENTC(4),CARD+4(6)    CONVERT RENT TO PACKED                              
+ 00002E D203 F1CF F18B 001CF 0018B    36        MVC     PLINE+1(4),MNTHP      PATTERN FOR MONTH                                   
+ 000034 DE03 F1CF F185 001CF 00185    37        ED      PLINE+1(4),MNTHC      EDIT MONTH INTO PLINE                               
+ 00003A D208 F1D6 F18F 001D6 0018F    38        MVC     PLINE+8(9),RENTP      PATTERN FOR RENT                                    
+ 000040 4110 F1D4            001D4    39        LA      R1,PLINE+6                                                                
+ 000044 DF08 F1D6 F187 001D6 00187    40        EDMK    PLINE+8(9),RENTC      EDIT RENT INTO PLINE                                
+ 00004A 0610                          41        BCTR    R1,0                                                                      
+ 00004C 925B 1000      00000          42        MVI     0(R1),C'$'            ADD THE DOLLAR SIGN                                 
+ 000050 E020 F1CE 0084 001CE          43        XPRNT   PLINE,132             PRINT PLINE                                         
+ 000056 FA10 F57D F129 0057D 00129    44        AP      COUNT(2),=P'1'        INCREMENT COUNT                                     
+ 00005C FA21 F17B F185 0017B 00185    45        AP      MNTHT(3),MNTHC(2)     ADD TO MONTH TOTAL                                  
+ 000062 FA63 F17E F187 0017E 00187    46        AP      RENTT(7),RENTC(4)     ADD TO RENT TOTAL                                   
+ 000068 E000 F12A 0050 0012A          47        XREAD   CARD,80                                                                   
+ 00006E 47F0 F01E            0001E    48        B       DO1                                                                       
+ 000072                               49 ENDDO1 DS      0H                                                                        
+ 000072 9240 F1CE      001CE          50        MVI     PLINE,C' '            CLEAR PLINE                                         
+ 000076 D282 F1CF F1CE 001CF 001CE    51        MVC     PLINE+1(131),PLINE                                                        
+                                      52 ********                                                                                 
+1                                                                                                               PAGE    2         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                      53 *PRINTING SUMMARY INFO                                                                   
+                                      54 ********                                                                                 
+                                      55 *MONTHS                                                                                  
+ 00007C E020 F2D6 0013 002D6          56        XPRNT   HEAD,19                                                                   
+ 000082 D205 F1CF F198 001CF 00198    57        MVC     PLINE+1(6),TMNTH      PATTERN                                             
+ 000088 DE05 F1CF F17B 001CF 0017B    58        ED      PLINE+1(6),MNTHT                                                          
+ 00008E E020 F3DE 0084 003DE          59        XPRNT   TOTALM,132            PRINT TOTAL MONTHS                                  
+ 000094 E020 F1CE 0084 001CE          60        XPRNT   PLINE,132                                                                 
+                                      61 *RENT                                                                                    
+ 00009A D20D F1CF F19E 001CF 0019E    62        MVC     PLINE+1(14),TRENT                                                         
+ 0000A0 4110 F1DA            001DA    63        LA      R1,PLINE+12           FOR DOLLAR SIGNS                                    
+ 0000A4 DF0D F1CF F17E 001CF 0017E    64        EDMK    PLINE+1(14),RENTT                                                         
+ 0000AA 0610                          65        BCTR    R1,0                                                                      
+ 0000AC 925B 1000      00000          66        MVI     0(R1),C'$'            ADD THE DOLLAR SIGN                                 
+ 0000B0 E020 F35A 0084 0035A          67        XPRNT   TOTALR,132                                                                
+ 0000B6 E020 F1CE 0084 001CE          68        XPRNT   PLINE,132             PRINT TOTAL RENT                                    
+ 0000BC 9240 F1CE      001CE          69        MVI     PLINE,C' '            CLEAR PLINE                                         
+ 0000C0 D282 F1CF F1CE 001CF 001CE    70        MVC     PLINE+1(131),PLINE                                                        
+                                      71 **********                                                                               
+                                      72 *AVERAGES                                                                                
+                                      73 **********                                                                               
+                                      74 *MONTHS                                                                                  
+ 0000C6 E020 F462 0084 00462          75        XPRNT   AVERGM,132                                                                
+ 0000CC F872 F56A F17B 0056A 0017B    76        ZAP     TEMP1(8),MNTHT        PREPARE MNTHT FOR DIVISION                          
+ 0000D2 F070 F56A 0002 0056A 00002    77        SRP     TEMP1(8),2,0          PREP DECIMALS                                       
+ 0000D8 FD71 F56A F57D 0056A 0057D    78        DP      TEMP1(8),COUNT        DIVISION                                            
+ 0000DE D20D F1CF F1AD 001CF 001AD    79        MVC     PLINE+1(14),AVMNTH    MONTH PATTERN                                       
+ 0000E4 DE0D F1CF F56A 001CF 0056A    80        ED      PLINE+1(14),TEMP1     MOVE TEMP INTO PLINE                                
+ 0000EA E020 F1CE 0084 001CE          81        XPRNT   PLINE,132                                                                 
+                                      82 *RENT                                                                                    
+ 0000F0 E020 F4E6 0084 004E6          83        XPRNT   AVERGR,132            PRINT RENT HEADER                                   
+ 0000F6 F8A6 F572 F17E 00572 0017E    84        ZAP     TEMP2(11),RENTT       PREPARE FOR DIVISION                                
+ 0000FC F0A0 F572 0002 00572 00002    85        SRP     TEMP2(11),2,0         PREP DECIMALS                                       
+ 000102 FDA1 F572 F57D 00572 0057D    86        DP      TEMP2(11),COUNT       DIVIDE                                              
+ 000108 D214 F1CF F1BA 001CF 001BA    87        MVC     PLINE+1(21),AVRNT     MOVE PATTERN                                        
+ 00010E 4110 F1E2            001E2    88        LA      R1,PLINE+20           POINT FOR DOLLAR SIGN                               
+ 000112 DF14 F1CF F572 001CF 00572    89        EDMK    PLINE+1(21),TEMP2                                                         
+ 000118 0610                          90        BCTR    R1,0                                                                      
+ 00011A 925B 1000      00000          91        MVI     0(R1),C'$'            ADD THE DOLLAR SIGN                                 
+ 00011E E020 F1CE 0084 001CE          92        XPRNT   PLINE,132                                                                 
+ 000124 07FE                          93        BR      14                                                                        
+                                      94        LTORG                                                                             
+ 000128 0C                            95                =P'0'                                                                     
+ 000129 1C                            96                =P'1'                                                                     
+                                      97 **********                                                                               
+                                      98 *MAIN STORAGE                                                                            
+                                      99 **********                                                                               
+ 000001                              100 R1     EQU     1                                                                         
+ 00012A                              101 CARD   DS      80C                                                                       
+ 00017A 5C                           102 INTER  DC      C'*'                                                                      
+ 00017B                              103 MNTHT  DS      PL3                                                                       
+ 00017E                              104 RENTT  DS      PL7                                                                       
+ 000185                              105 MNTHC  DS      PL2                                                                       
+ 000187                              106 RENTC  DS      PL4                                                                       
+ 00018B 40202120                     107 MNTHP  DC      X'40202120'                                                               
+ 00018F 40202020206B2120             108 RENTP  DC      X'40202020206B212020'                                                     
+ 000198 402020202020                 109 TMNTH  DC      X'402020202020'                                                           
+1                                                                                                               PAGE    3         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 00019E 4020202020202020             110 TRENT  DC      X'402020202020202020206B20212020'                                         
+ 0001AD 4020202020202020             111 AVMNTH DC      X'402020202020202020214B2020'                                             
+ 0001BA 4020202020202020             112 AVRNT  DC      X'402020202020202020202020206B2020214B2020'                               
+ 0001CE 4040404040404040             113 PLINE  DC      CL132' '                                                                  
+ 000252 40D4D6D5E3C8E240             114 COLHE  DC      CL132' MONTHS    RENT DUE'                                                
+ 0002D6 40E2E4D4D4C1D9E8             115 HEAD   DC      CL132' SUMMARY STATISTICS'                                                
+                                     116 *TOTALS                                                                                  
+ 00035A 40E3D6E3C1D340D9             117 TOTALR DC      CL132' TOTAL RENT'                                                        
+ 0003DE 40E3D6E3C1D340D4             118 TOTALM DC      CL132' TOTAL MONTHS'                                                      
+                                     119 *AVERAGES                                                                                
+ 000462 40C1E5C5D9C1C7C5             120 AVERGM DC      CL132' AVERAGE MONTHS'                                                    
+ 0004E6 40C1E5C5D9C1C7C5             121 AVERGR DC      CL132' AVERAGE RENT'                                                      
+ 00056A                              122 TEMP1  DS      PL8                                                                       
+ 000572                              123 TEMP2  DS      PL11                                                                      
+ 00057D                              124 COUNT  DS      PL2                                                                       
+                                     125        END     MAIN                                                                      
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:    4804 HIGH:     868 LEAVING:  487896 FREE BYTES. AVERAGE:       45 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.000 SECS,   126000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+ MONTHS    RENT DUE                                                                                                               
+    7     $50,150                                                                                                                 
+    4     $19,000                                                                                                                 
+    7    $118,290                                                                                                                 
+    1     $35,099                                                                                                                 
+    5     $20,000                                                                                                                 
+    8     $13,100                                                                                                                 
+    2     $50,400                                                                                                                 
+    5    $130,000                                                                                                                 
+    9     $14,200                                                                                                                 
+    1     $50,550                                                                                                                 
+    1     $41,999                                                                                                                 
+   10    $152,600                                                                                                                 
+   12     $16,000                                                                                                                 
+    9    $157,100                                                                                                                 
+    8    $111,500                                                                                                                 
+ SUMMARY STATISTICS                                                                                                               
+ TOTAL MONTHS                                                                                                                     
+     89                                                                                                                           
+ TOTAL RENT                                                                                                                       
+        $97,998                                                                                                                   
+ AVERAGE MONTHS                                                                                                                   
+          5.93                                                                                                                    
+ AVERAGE RENT                                                                                                                     
+           $65,332.53                                                                                                             
+0*** EXECUTION TIME =    0.000 SECS.       280 INSTRUCTIONS EXECUTED -   280000 INSTRUCTIONS/SEC ***                              
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                

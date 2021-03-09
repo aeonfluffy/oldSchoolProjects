@@ -1,0 +1,431 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 00.54.43 JOB00872 ---- THURSDAY,  24 NOV 2016 ----
+ 00.54.43 JOB00872  IRR010I  USERID KC03PE7  IS ASSIGNED TO THIS JOB.
+ 00.54.43 JOB00872  ICH70001I KC03PE7  LAST ACCESS AT 00:54:31 ON THURSDAY, NOVEMBER 24, 2016
+ 00.54.43 JOB00872  $HASP373 KC03PE7C STARTED - INIT 2    - CLASS A        - SYS S0W1
+ 00.54.43 JOB00872  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 00.54.43 JOB00872  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 00.54.43 JOB00872  -KC03PE7C                      00     55 ******    .00     .0    148   0      0      0      0     0
+ 00.54.43 JOB00872  -KC03PE7C ENDED.  NAME-Rachel Bastuk        TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 00.54.43 JOB00872  $HASP395 KC03PE7C ENDED
+0------ JES2 JOB STATISTICS ------
+-  24 NOV 2016 JOB EXECUTION DATE
+-          346 CARDS READ
+-          431 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           31 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03PE7C JOB ,'Rachel Bastuk',MSGCLASS=H                              JOB00872
+         2 //STEP1 EXEC PGM=ASSIST                                                         
+         3 //STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                                
+         4 //SYSPRINT DD SYSOUT=*                                                          
+         5 //SYSIN DD *                                                                    
+           //*                                                                             
+         6 //FT05F001 DD  *                                                                
+ ICH70001I KC03PE7  LAST ACCESS AT 00:54:31 ON THURSDAY, NOVEMBER 24, 2016
+ IEF236I ALLOC. FOR KC03PE7C STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IEF237I JES2 ALLOCATED TO FT05F001
+ IEF142I KC03PE7C STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03PE7.KC03PE7C.JOB00872.D0000103.?         SYSOUT        
+ IEF285I   KC03PE7.KC03PE7C.JOB00872.D0000101.?         SYSIN         
+ IEF285I   KC03PE7.KC03PE7C.JOB00872.D0000102.?         SYSIN         
+ IEF373I STEP/STEP1   /START 2016329.0054
+ IEF032I STEP/STEP1   /STOP  2016329.0054 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   268K  EXT:        0K  SYS:    11460K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03PE7C/START 2016329.0054
+ IEF033I  JOB/KC03PE7C/STOP  2016329.0054 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 ****************************************************                                     
+                                       2 *                                                                                        
+                                       3 *     ****FREE EXTENSION*****                                                            
+                                       4 *     PROGRAMMER: RACHEL BASTUK                                                          
+                                       5 *                                                                                        
+                                       6 *     ASSIGNMENT: NUMBER 9                                                               
+                                       7 *       THIS ASSIGNMENT PRODUCES A REPORT BASED ON GRADES                                
+                                       8 *       THE FIRST LINE IS A CONTROL CARD THAT WILL CONTROL                               
+                                       9 *           WHETHER OR NOT STATISTICS OR GRAPH INFORMATION WILL                          
+                                      10 *           BE CALLED                                                                    
+                                      11 *                                                                                        
+                                      12 ****************************************************                                     
+                                      13 *                                                                                        
+ 000000                               14 MAIN   CSECT                                                                             
+ 000000 90EC D00C            0000C    15        STM     R14,R12,12(R13)     SAVE REGISTERS                                        
+ 000004 18CF                          16        LR      R12,R15                                                                   
+ 000000                               17        USING   MAIN,R12            SETUP BASE REGISTER                                   
+ 000006 41E0 C07C            0007C    18        LA      R14,MNSAVE          POINT TO SAVE AREA                                    
+ 00000A 50D0 E004            00004    19        ST      R13,4(,R14)         BACKWARDS POINTER                                     
+ 00000E 50E0 D008            00008    20        ST      R14,8(,R13)         FORWARD POINTER                                       
+ 000012 18DE                          21        LR      R13,R14                                                                   
+                                      22 *                                                                                        
+                                      23 *PROCESS FIRST LINE                                                                      
+ 000014 E000 C28C 0050 0028C          24        XREAD   FL,80                                                                     
+ 00001A                               25 TEST1  DS      0H                  COLUMN1 IS TO PRINT STAT                              
+ 00001A 95E8 C28C      0028C          26        CLI     FL,C'Y'             CHECK IF FIRST COLUMN IS 1                            
+ 00001E 4770 C026            00026    27        BNE     TEST2                                                                     
+ 000022 9680 C0C4      000C4          28        OI      FLAG,B'10000000'    CHANGE BIT ONE IN FLAG                                
+ 000026                               29 TEST2  DS      0H                  COLUMN5 TO PRINT GRAPH                                
+ 000026 95E8 C290      00290          30        CLI     FL+4,C'Y'           CHECK 5TH COLUMN                                      
+ 00002A 4770 C032            00032    31        BNE     ENDT                                                                      
+ 00002E 9601 C0C4      000C4          32        OI      FLAG,B'00000001'    CHANGE 7TH BIT FOR FLAG                               
+ 000032                               33 ENDT   DS      0H                                                                        
+ 000032 E060 C0C4 0008 000C4          34        XDUMP   FLAG,8                                                                    
+                                      35 *   CALL BUILD                                                                           
+ 000038 4110 C284            00284    36        LA      R1,PLIST1                                                                 
+ 00003C 58F0 C070            00070    37        L       R15,=V(BUILD)                                                             
+ 000040 05EF                          38        BALR    R14,R15                                                                   
+                                      39 *RUN TESTS                                                                               
+                                      40 *****                                                                                    
+                                      41 *STATS TEST                                                                              
+                                      42 *****                                                                                    
+ 000042                               43 ST     DS      0H                  LABEL                                                 
+ 000042 9180 C0C4      000C4          44        TM      FLAG,B'10000000'    TEST FIRST BIT FOR STATS                              
+ 000046 4780 C054            00054    45        BZ      GR                  BRANCH TO GRAPH                                       
+ 00004A 4110 C284            00284    46        LA      R1,PLIST1                                                                 
+ 00004E 58F0 C074            00074    47        L       R15,=V(STATS)                                                             
+ 000052 05EF                          48        BALR    R14,R15                                                                   
+                                      49 ****                                                                                     
+                                      50 *GRAPH TEST                                                                              
+                                      51 ****                                                                                     
+ 000054                               52 GR     DS      0H                                                                        
+1                                                                                                               PAGE    2         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000054 9101 C0C4      000C4          53        TM      FLAG,B'00000001'    TEST LAST BIT FOR GRAPH                               
+ 000058 4780 C066            00066    54        BZ      ENDC                BRANCH TO ENDC                                        
+ 00005C 4110 C284            00284    55        LA      R1,PLIST1                                                                 
+ 000060 58F0 C078            00078    56        L       R15,=V(GRAPH)                                                             
+ 000064 05EF                          57        BALR    R14,R15                                                                   
+ 000066                               58 ENDC   DS      0H                                                                        
+                                      59 *                                                                                        
+ 000066 58D0 D004            00004    60        L       R13,4(,R13)         LOAD ADDRESS OF CALLER                                
+ 00006A 98EC D00C            0000C    61        LM      R14,R12,12(R13)     RESTORE ALL BUT 13                                    
+ 00006E 07FE                          62        BR      R14                 RETURN                                                
+                                      63        LTORG                                                                             
+ 000070 000002E0                      64                =V(BUILD)                                                                 
+ 000074 000003D0                      65                =V(STATS)                                                                 
+ 000078 00000660                      66                =V(GRAPH)                                                                 
+                                      67 *MAIN SAVE                                                                               
+                                      68 *                                                                                        
+ 00007C                               69 MNSAVE DS      18F                                                                       
+ 0000C4 00                            70 FLAG   DC      X'00'                                                                     
+                                      71 *      BIT 0 = 1 RUN STAT REPORT                                                         
+                                      72 *      BIT 1 - 6 UNUSED                                                                  
+                                      73 *      BIT 7 = 1 RUN GRAPH                                                               
+ 0000C5                               74 TABLE  DS      20CL22                                                                    
+ 000280 000000C5                      75 EOT    DC      A(TABLE)                                                                  
+ 000284 000000C500000280              76 PLIST1 DC      A(TABLE,EOT)                                                              
+ 00028C                               77 FL     DS      80C                                                                       
+                                      78 ***                                                                                      
+                                      79 *DSECTS FOR BUILD                                                                        
+                                      80 ***                                                                                      
+ 000000                               81 $RECORD DSECT                                                                            
+ 000000                               82 $STAT   DS      PL2                                                                      
+ 000002                               83 $NAME   DS      CL20                                                                     
+                                      84 ************************                                                                 
+                                      85 * SUBROUTINE - BUILD *                                                                   
+                                      86 ************************                                                                 
+                                      87 *                                                                                        
+ 0002E0                               88 BUILD  CSECT                                                                             
+ 0002E0 90EC D00C            0000C    89        STM     R14,R12,12(R13)     SAVE REGISTERS                                        
+ 0002E4 18CF                          90        LR      R12,R15                                                                   
+ 0002E0                               91        USING   BUILD,R12           SETUP BASE REGISTER                                   
+ 000000                               92        USING   $RECORD,R2                                                                
+ 0002E6 41E0 C050            00330    93        LA      R14,BSAVE           POINT TO SAVE AREA                                    
+ 0002EA 50D0 E004            00004    94        ST      R13,4(,R14)         BACKWARDS POINTER                                     
+ 0002EE 50E0 D008            00008    95        ST      R14,8(,R13)         FORWARD POINTER                                       
+ 0002F2 18DE                          96        LR      R13,R14                                                                   
+ 0002F4 9823 1000            00000    97        LM      R2,R3,0(R1)         GET PARMS                                             
+                                      98 *                                  R2 - @TABLE R3 - @EOT                                 
+ 0002F8 E000 C098 0050 00378          99        XREAD   CARD,80             READ FIRST CARD                                       
+ 0002FE 4740 C03C            0031C   100 DO1    BM      ENDDO1              WHILE MORE RECORDS                                    
+ 000302 F212 2000 C098 00000 00378   101        PACK    $STAT,CARD(3)       PACK FIRST NUMBER                                     
+ 000308 D213 2002 C09B 00002 0037B   102        MVC     $NAME,CARD+3        MOVE NAME                                             
+ 00030E 4122 0016            00016   103        LA      R2,22(R2)           INCREMENT TABLE POINTER                               
+ 000312 E000 C098 0050 00378         104        XREAD   CARD,80             READ NEXT CARD                                        
+ 000318 47F0 C01E            002FE   105        B       DO1                 LABEL                                                 
+ 00031C                              106 ENDDO1 DS      0H                  LABEL                                                 
+ 00031C 5023 0000            00000   107        ST      R2,0(R3)            STORE END OF TABLE                                    
+ 000320 58D0 D004            00004   108        L       R13,4(,R13)         LOAD ADDRESS OF CALLER                                
+ 000324 98EC D00C            0000C   109        LM      R14,R12,12(R13)     RESTORE ALL BUT 13                                    
+1                                                                                                               PAGE    3         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000328 07FE                         110        BR      R14                 RETURN                                                
+                                     111        LTORG                                                                             
+                                     112 ***************                                                                          
+                                     113 *BUILD STORAGE                                                                           
+                                     114 ***************                                                                          
+ 000330                              115 BSAVE  DS      18F                                                                       
+ 000378                              116 CARD   DS      80C                                                                       
+ 0003C8 40                           117 INTERC DC      C' '                                                                      
+                                     118 ************************                                                                 
+                                     119 * SUBROUTINE - STATS *                                                                   
+                                     120 ************************                                                                 
+                                     121 *                                                                                        
+ 0003D0                              122 STATS  CSECT                                                                             
+                                     123 *LINKAGE                                                                                 
+ 0003D0 90EC D00C            0000C   124        STM     R14,R12,12(R13)     SAVE REGISTERS                                        
+ 0003D4 18CF                         125        LR      R12,R15                                                                   
+ 0003D0                              126        USING   STATS,R12           SETUP BASE REGISTER                                   
+ 0003D6 41E0 C0A4            00474   127        LA      R14,SSAVE           POINT TO SAVE AREA                                    
+ 0003DA 50D0 E004            00004   128        ST      R13,4(,R14)         BACKWARDS POINTER                                     
+ 0003DE 50E0 D008            00008   129        ST      R14,8(,R13)         FORWARD POINTER                                       
+ 0003E2 18DE                         130        LR      R13,R14                                                                   
+ 0003E4 9823 1000            00000   131        LM      R2,R3,0(R1)         GET PARMS                                             
+                                     132 *                                  R2 - @TABLE R3 - @EOT                                 
+                                     133 *                                                                                        
+ 0003E8 5833 0000            00000   134        L       R3,0(R3)            GET ACTUAL END OF TABLE                               
+ 0003EC E020 C0EC 0084 004BC         135        XPRNT   HDR1,132            PRINT OUT THE HEADER                                  
+ 0003F2 E020 C1F7 0084 005C7         136        XPRNT   PLINE,132           PRINT A SINGLE CLEAR LINE                             
+ 0003F8 F820 C1F4 C0A0 005C4 00470   137        ZAP     TOTAL(3),=P'0'      ZERO OUT TOTAL BEFORE ADDING                          
+                                     138 *DO LOOP                                                                                 
+ 0003FE 1923                         139 DO2    CR      R2,R3               IF AT END                                             
+ 000400 47B0 C06A            0043A   140        BNL     ENDDO2              BRANCH TO ENDDO                                       
+ 000404 D213 C1F8 2002 005C8 00002   141        MVC     PLINE+1(20),2(R2)   LOAD NAME INTO PRINTLINE                              
+ 00040A D203 C20C C27B 005DC 0064B   142        MVC     PLINE+21(4),PTTRN   MOVE PATTERN                                          
+ 000410 DE03 C20C 2000 005DC 00000   143        ED      PLINE+21(4),0(R2)   EDIT PACKED #                                         
+ 000416 FA21 C1F4 2000 005C4 00000   144        AP      TOTAL(3),0(2,R2)    ADD TO THE TOTAL                                      
+ 00041C 4122 0016            00016   145        LA      R2,22(R2)           INCREMENT THE TABLE                                   
+ 000420 E020 C1F7 0084 005C7         146        XPRNT   PLINE,132           PRINT TOTAL RENT                                      
+ 000426 9240 C1F7      005C7         147        MVI     PLINE,C' '          CLEAR PLINE                                           
+ 00042A D282 C1F8 C1F7 005C8 005C7   148        MVC     PLINE+1(131),PLINE                                                        
+ 000430 FA10 C28B C0A1 0065B 00471   149        AP      COUNT(2),=P'1'         INCREMENT COUNT                                    
+ 000436 47F0 C02E            003FE   150        B       DO2                                                                       
+ 00043A                              151 ENDDO2 DS      0H                                                                        
+                                     152 ***                                                                                      
+                                     153 *PRINTING THE AVERAGE                                                                    
+                                     154 ****                                                                                     
+ 00043A E020 C170 0084 00540         155        XPRNT   AVG,132                                                                   
+ 000440 F842 C286 C1F4 00656 005C4   156        ZAP     TEMP(5),TOTAL(3)    PREPARE TEMP FOR DIVISION                             
+ 000446 F040 C286 0002 00656 00002   157        SRP     TEMP(5),2,0                                                               
+ 00044C FD41 C286 C28B 00656 0065B   158        DP      TEMP(5),COUNT(2)    DIVIDE                                                
+ 000452 D208 C1F8 C27F 005C8 0064F   159        MVC     PLINE+1(9),TPTTRN   MOVE PATTERN INTO PLINE                               
+ 000458 DE08 C1F8 C286 005C8 00656   160        ED      PLINE+1(9),TEMP     MOVE PACKED TEMP INTO PLINE                           
+ 00045E E020 C1F7 0084 005C7         161        XPRNT   PLINE,132           PRINT                                                 
+                                     162 ***                                                                                      
+                                     163 *LINKAGE                                                                                 
+                                     164 ***                                                                                      
+ 000464 58D0 D004            00004   165        L       R13,4(,R13)         LOAD ADDRESS OF CALLER                                
+ 000468 98EC D00C            0000C   166        LM      R14,R12,12(R13)     RESTORE ALL BUT 13                                    
+1                                                                                                               PAGE    4         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 00046C 07FE                         167        BR      R14                 RETURN                                                
+                                     168        LTORG                                                                             
+ 000470 0C                           169                =P'0'                                                                     
+ 000471 1C                           170                =P'1'                                                                     
+                                     171 ***************                                                                          
+                                     172 *STATS STORAGE                                                                           
+                                     173 ***************                                                                          
+ 000474                              174 SSAVE  DS      18F                                                                       
+ 0004BC 40C3D3C1E2E240E2             175 HDR1   DC      CL132' CLASS STATISTICS'                                                  
+ 000540 40C1E5C5D9C1C7C5             176 AVG    DC      CL132' AVERAGE'                                                           
+ 0005C4                              177 TOTAL  DS      PL3                                                                       
+ 0005C7 4040404040404040             178 PLINE  DC      CL132' '                                                                  
+ 00064B 40202020                     179 PTTRN  DC      X'40202020'                                                               
+ 00064F 402020204B2020               180 TPTTRN DC      X'402020204B2020'                                                         
+ 000656 000000000C                   181 TEMP   DC      PL5'0'                                                                    
+ 00065B 000C                         182 COUNT  DC      PL2'0'                                                                    
+                                     183 ************************                                                                 
+                                     184 * SUBROUTINE - GRAPH *                                                                   
+                                     185 *R4     GRADE 92 - 100                                                                   
+                                     186 *R5     GRADE 84 -  91                                                                   
+                                     187 *R6     GRADE 76 -  83                                                                   
+                                     188 *R7     GRADE 68 -  75                                                                   
+                                     189 *R8     GRADE  0 -  67                                                                   
+                                     190 ************************                                                                 
+                                     191 *                                                                                        
+ 000660                              192 GRAPH  CSECT                                                                             
+                                     193 *LINKAGE                                                                                 
+ 000660 90EC D00C            0000C   194        STM     R14,R12,12(R13)     SAVE REGISTERS                                        
+ 000664 18CF                         195        LR      R12,R15                                                                   
+ 000660                              196        USING   GRAPH,R12           SETUP BASE REGISTER                                   
+ 000666 41E0 C190            007F0   197        LA      R14,GSAVE           POINT TO SAVE AREA                                    
+ 00066A 50D0 E004            00004   198        ST      R13,4(,R14)         BACKWARDS POINTER                                     
+ 00066E 50E0 D008            00008   199        ST      R14,8(,R13)         FORWARD POINTER                                       
+ 000672 18DE                         200        LR      R13,R14                                                                   
+ 000674 9823 1000            00000   201        LM      R2,R3,0(R1)         GET PARMS                                             
+                                     202 *                                  R2 - @TABLE R3 - @EOT                                 
+                                     203 *                                                                                        
+ 000678 5833 0000            00000   204        L       R3,0(R3)            GET ACTUAL END OF TABLE                               
+ 00067C E020 C2F5 0084 00955         205        XPRNT   GRPHH,132           PRINT HEADER                                          
+                                     206 *ZERO OUT ALL THE REGISTERS                                                              
+ 000682 1B44                         207        SR      R4,R4                                                                     
+ 000684 1B55                         208        SR      R5,R5                                                                     
+ 000686 1B66                         209        SR      R6,R6                                                                     
+ 000688 1B77                         210        SR      R7,R7                                                                     
+ 00068A 1B88                         211        SR      R8,R8                                                                     
+ 00068C 1923                         212 DO3    CR      R2,R3                                                                     
+ 00068E 47B0 C094            006F4   213        BNL     ENDDO3              BRANCH TO ENDDO                                       
+                                     214 *IF STATEMENTS                                                                           
+ 000692 F911 2000 C184 00000 007E4   215 IF1    CP      0(2,R2),=P'92'      CHECK IF IT'S HIGHER THAN 92                          
+ 000698 4740 C044            006A4   216        BL      ELIF1               IF LOWER GO TO ELIF1                                  
+ 00069C 4144 0001            00001   217        LA      R4,1(R4)            INCREMENT                                             
+ 0006A0 47F0 C08C            006EC   218        B       END1                BRANCH BACK UP                                        
+ 0006A4 F911 2000 C186 00000 007E6   219 ELIF1  CP      0(2,R2),=P'84'      CHECK IF HIGHER THAN 84                               
+ 0006AA 4740 C056            006B6   220        BL      ELIF2               IF LOWER GO TO ELIF2                                  
+ 0006AE 4155 0001            00001   221        LA      R5,1(R5)            INCREMENT                                             
+ 0006B2 47F0 C08C            006EC   222        B       END1                BRANCH BACK UP                                        
+ 0006B6 F911 2000 C188 00000 007E8   223 ELIF2  CP      0(2,R2),=P'76'      CHECK IF HIGHER THAN 76                               
+1                                                                                                               PAGE    5         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 0006BC 4740 C068            006C8   224        BL      ELIF3               IF LOWER GO TO ELIF3                                  
+ 0006C0 4166 0001            00001   225        LA      R6,1(R6)            INCREMENT                                             
+ 0006C4 47F0 C08C            006EC   226        B       END1                BRANCH BACK UP                                        
+ 0006C8 F911 2000 C18A 00000 007EA   227 ELIF3  CP      0(2,R2),=P'68'      CHECK IF HIGHER THAN 68                               
+ 0006CE 4740 C07A            006DA   228        BL      ELSE1               IF LOWER GO TO ELSE1                                  
+ 0006D2 4177 0001            00001   229        LA      R7,1(R7)            INCREMENT                                             
+ 0006D6 47F0 C08C            006EC   230        B       END1                BRANCH BACK UP                                        
+ 0006DA F911 2000 C18C 00000 007EC   231 ELSE1  CP      0(2,R2),=P'67'      CHECK FOR 0 - 67                                      
+ 0006E0 4720 C08C            006EC   232        BH      END1                IF HIGHER THAN 67 BRANCH                              
+ 0006E4 4188 0001            00001   233        LA      R8,1(R8)            INCREMENT                                             
+ 0006E8 47F0 C08C            006EC   234        B       END1                BRANCH BACK UP                                        
+ 0006EC                              235 END1   DS      0H                                                                        
+ 0006EC 4122 0016            00016   236        LA      R2,22(R2)           INCREMENT TABLE POSITION                              
+ 0006F0 47F0 C02C            0068C   237        B       DO3                                                                       
+ 0006F4                              238 ENDDO3 DS      0H                                                                        
+                                     239 *                                                                                        
+                                     240 *PRINTING THE STARS                                                                      
+                                     241 ******FIRST STAR SET********                                                             
+ 0006F4 D207 C263 C158 008C3 007B8   242        MVC     PLINE1+1(8),=C'92 - 100'                                                  
+ 0006FA 5940 C180            007E0   243        C       R4,=F'0'            MAKE SURE R4 ISN'T 0                                  
+ 0006FE 4780 C0A8            00708   244        BE      PRINT1              IF IT IS JUST BRANCH                                  
+ 000702 0640                         245        BCTR    R4,R0               DECRIMENT BY 1                                        
+ 000704 4440 C1D8            00838   246        EX      R4,MOVE             GRADE 92 - 100                                        
+ 000708                              247 PRINT1 DS      0H                                                                        
+ 000708 E020 C262 0084 008C2         248        XPRNT   PLINE1,132                                                                
+ 00070E 9240 C262      008C2         249        MVI     PLINE1,C' '         CLEAR PLINE                                           
+ 000712 D282 C263 C262 008C3 008C2   250        MVC     PLINE1+1(131),PLINE1                                                      
+                                     251 ******SECOND STAR SET********                                                            
+ 000718 D207 C263 C160 008C3 007C0   252        MVC     PLINE1+1(8),=C'84 -  91'                                                  
+ 00071E 5950 C180            007E0   253        C       R5,=F'0'            MAKE SURE R4 ISN'T 0                                  
+ 000722 4780 C0CC            0072C   254        BE      PRINT2              IF IT IS JUST BRANCH                                  
+ 000726 0650                         255        BCTR    R5,R0               DECRIMENT BY 1                                        
+ 000728 4450 C1D8            00838   256        EX      R5,MOVE             GRADE 92 - 100                                        
+ 00072C                              257 PRINT2 DS      0H                                                                        
+ 00072C E020 C262 0084 008C2         258        XPRNT   PLINE1,132                                                                
+ 000732 9240 C262      008C2         259        MVI     PLINE1,C' '         CLEAR PLINE                                           
+ 000736 D282 C263 C262 008C3 008C2   260        MVC     PLINE1+1(131),PLINE1                                                      
+                                     261 ******THIRD STAR SET********                                                             
+ 00073C D207 C263 C168 008C3 007C8   262        MVC     PLINE1+1(8),=C'76 -  83'                                                  
+ 000742 5960 C180            007E0   263        C       R6,=F'0'            MAKE SURE R4 ISN'T 0                                  
+ 000746 4780 C0F0            00750   264        BE      PRINT3              IF IT IS JUST BRANCH                                  
+ 00074A 0660                         265        BCTR    R6,R0               DECRIMENT BY 1                                        
+ 00074C 4460 C1D8            00838   266        EX      R6,MOVE             GRADE 92 - 100                                        
+ 000750                              267 PRINT3 DS      0H                                                                        
+ 000750 E020 C262 0084 008C2         268        XPRNT   PLINE1,132                                                                
+ 000756 9240 C262      008C2         269        MVI     PLINE1,C' '         CLEAR PLINE                                           
+ 00075A D282 C263 C262 008C3 008C2   270        MVC     PLINE1+1(131),PLINE1                                                      
+                                     271 ******FOURTH STAR SET********                                                            
+ 000760 D207 C263 C170 008C3 007D0   272        MVC     PLINE1+1(8),=C'68 -  75'                                                  
+ 000766 5970 C180            007E0   273        C       R7,=F'0'            MAKE SURE R4 ISN'T 0                                  
+ 00076A 4780 C114            00774   274        BE      PRINT4              IF IT IS JUST BRANCH                                  
+ 00076E 0670                         275        BCTR    R7,R0               DECRIMENT BY 1                                        
+ 000770 4470 C1D8            00838   276        EX      R7,MOVE             GRADE 92 - 100                                        
+ 000774                              277 PRINT4 DS      0H                                                                        
+ 000774 E020 C262 0084 008C2         278        XPRNT   PLINE1,132                                                                
+ 00077A 9240 C262      008C2         279        MVI     PLINE1,C' '         CLEAR PLINE                                           
+ 00077E D282 C263 C262 008C3 008C2   280        MVC     PLINE1+1(131),PLINE1                                                      
+1                                                                                                               PAGE    6         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     281 ******FIFTH STAR SET********                                                             
+ 000784 D207 C263 C178 008C3 007D8   282        MVC     PLINE1+1(8),=C' 0 -  67'                                                  
+ 00078A 5980 C180            007E0   283        C       R8,=F'0'            MAKE SURE R4 ISN'T 0                                  
+ 00078E 4780 C138            00798   284        BE      PRINT5              IF IT IS JUST BRANCH                                  
+ 000792 0680                         285        BCTR    R8,R0               DECRIMENT BY 1                                        
+ 000794 4480 C1D8            00838   286        EX      R8,MOVE             GRADE 92 - 100                                        
+ 000798                              287 PRINT5 DS      0H                                                                        
+ 000798 E020 C262 0084 008C2         288        XPRNT   PLINE1,132                                                                
+ 00079E 9240 C262      008C2         289        MVI     PLINE1,C' '         CLEAR PLINE                                           
+ 0007A2 D282 C263 C262 008C3 008C2   290        MVC     PLINE1+1(131),PLINE1                                                      
+                                     291 *LINKAGE                                                                                 
+ 0007A8 58D0 D004            00004   292        L       R13,4(,R13)         LOAD ADDRESS OF CALLER                                
+ 0007AC 98EC D00C            0000C   293        LM      R14,R12,12(R13)     RESTORE ALL BUT 13                                    
+ 0007B0 07FE                         294        BR      R14                 RETURN                                                
+                                     295        LTORG                                                                             
+ 0007B8 F9F2406040F1F0F0             296                =C'92 - 100'                                                              
+ 0007C0 F8F440604040F9F1             297                =C'84 -  91'                                                              
+ 0007C8 F7F640604040F8F3             298                =C'76 -  83'                                                              
+ 0007D0 F6F840604040F7F5             299                =C'68 -  75'                                                              
+ 0007D8 40F040604040F6F7             300                =C' 0 -  67'                                                              
+ 0007E0 00000000                     301                =F'0'                                                                     
+ 0007E4 092C                         302                =P'92'                                                                    
+ 0007E6 084C                         303                =P'84'                                                                    
+ 0007E8 076C                         304                =P'76'                                                                    
+ 0007EA 068C                         305                =P'68'                                                                    
+ 0007EC 067C                         306                =P'67'                                                                    
+                                     307 ***************                                                                          
+                                     308 *GRAPH STORAGE                                                                           
+                                     309 ***************                                                                          
+ 0007F0                              310 GSAVE  DS      18F                                                                       
+ 000838 D200 C280 C1DE 008E0 0083E   311 MOVE   MVC     PLINE1+30(0),STARS                                                        
+ 00083E 5C5C5C5C5C5C5C5C             312 STARS  DC      132C'*'                                                                   
+ 0008C2 4040404040404040             313 PLINE1 DC      CL132' '                                                                  
+ 000946                              314 TNUM   DS      PL5                                                                       
+ 00094B 4020202020202020             315 GTPTN  DC      X'40202020202020202020'                                                   
+ 000955 40C3D3C1E2E240C7             316 GRPHH  DC      CL132' CLASS GRADE DISTRIBUTION'                                          
+                                     317 ***********                                                                              
+                                     318 * EQUATES *                                                                              
+                                     319 ***********                                                                              
+                                     320 *                                                                                        
+ 000000                              321 R0     EQU     0                                                                         
+ 000001                              322 R1     EQU     1                                                                         
+ 000002                              323 R2     EQU     2                                                                         
+ 000003                              324 R3     EQU     3                                                                         
+ 000004                              325 R4     EQU     4                                                                         
+ 000005                              326 R5     EQU     5                                                                         
+ 000006                              327 R6     EQU     6                                                                         
+ 000007                              328 R7     EQU     7                                                                         
+ 000008                              329 R8     EQU     8                                                                         
+ 000009                              330 R9     EQU     9                                                                         
+ 00000A                              331 R10    EQU     10                                                                        
+ 00000B                              332 R11    EQU     11                                                                        
+ 00000C                              333 R12    EQU     12                                                                        
+ 00000D                              334 R13    EQU     13                                                                        
+ 00000E                              335 R14    EQU     14                                                                        
+ 00000F                              336 R15    EQU     15                                                                        
+                                     337        END    MAIN                                                                       
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+1*** DYNAMIC CORE AREA USED:  LOW:   14584 HIGH:    2052 LEAVING:  476932 FREE BYTES. AVERAGE:       49 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.001 SECS,   338000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+0BEGIN XSNAP - CALL     1 AT D0000038 USER STORAGE                                                                                
+0                             CORE ADDRESSES SPECIFIED-     0000C4 TO 0000CC                                                      
+ 0000C0   F5F5F5F5 81F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5   *5555.555555555555555555555555555*         
+0                                                                                                                                 
+ CLASS STATISTICS                                                                                                                 
+                                                                                                                                  
+ Hi Story              99                                                                                                         
+ Anita Bath            63                                                                                                         
+ Drew P. Drawers       79                                                                                                         
+ Ima Hogg              98                                                                                                         
+ Kurt Answer           12                                                                                                         
+ Ann Honour            88                                                                                                         
+ Ivanna Tinkle         83                                                                                                         
+ Bea Tidy              78                                                                                                         
+ I. P. Freely          66                                                                                                         
+ Jim Shorts            88                                                                                                         
+ Dane Knight           76                                                                                                         
+ U. C. Forever         77                                                                                                         
+ Doug A. Hole         100                                                                                                         
+ Mary Way              92                                                                                                         
+ Bott M. Feeder        55                                                                                                         
+ AVERAGE                                                                                                                          
+   76.93                                                                                                                          
+ CLASS GRADE DISTRIBUTION                                                                                                         
+ 92 - 100                     ****                                                                                                
+ 84 -  91                     **                                                                                                  
+ 76 -  83                     *****                                                                                               
+ 68 -  75                                                                                                                         
+  0 -  67                     ****                                                                                                
+0*** EXECUTION TIME =    0.000 SECS.       569 INSTRUCTIONS EXECUTED -   569000 INSTRUCTIONS/SEC ***                              
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                

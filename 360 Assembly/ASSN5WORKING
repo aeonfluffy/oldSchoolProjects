@@ -1,0 +1,74 @@
+//KC03PE7C JOB ,'Rachel Bastuk',MSGCLASS=H
+//STEP1 EXEC PGM=ASSIST
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+*
+*MAIN
+*
+MAIN   CSECT
+       USING   MAIN,15
+       LA      R1,PLIST1       LOAD THE PARAMETER LIST
+       BAL     R13,BUILD       CALL BUILD SUBROUTINE
+       XDUMP   TABLE,200
+       BR      14
+       LTORG
+********************
+***MAIN STORAGE ****
+********************
+R0     EQU     0
+R1     EQU     1
+R2     EQU     2
+R3     EQU     3
+R4     EQU     4
+R13    EQU     13
+R15    EQU     15
+PLIST1 DC      A(TABLE,EOT)
+TABLE  DC      50F'-1'
+EOT    DC      A(TABLE)
+*
+*BUILDING A TABLE
+*PARAMETERS: TABLE, END OF TABLE
+*REGISTERS:  R2 HOLDS TABLE
+*            R3 HOLDS EOT
+*
+BUILD  DS    0H
+       STM   R0,R15,BSAVE      SAVE REGISTERS
+       LM    R2,R3,0(R1)       LOAD THE PLIST
+*                              R2 - @TABLE
+*                              R3 - @EOT
+       LA    R4,TABLE
+       XREAD CARD,80           READ FIRST CARD
+DO1    BM    ENDDO1            WHILE MORE RECORDS
+       XDECI R2,CARD           READ NEXT
+DO2    BO    ENDDO2
+       ST    R2,0(R4)          STORE IN TABLE
+       LA    R4,4(R4)          LOAD NEXT POS IN TABLE
+       XDECI R2,0(R1)          GRAB NEXT #
+       B     DO2               BRANCH BACK TO DO2
+ENDDO2 DS    0H                ENDDO 2
+       XREAD CARD,80           CHECK NEXT LINE FOR CARD
+       B     DO1               BRANCH BACK TO FIRST LOOP
+ENDDO1 DS    0H
+       ST    R2,0(R3)
+       LM    R0,R15,BSAVE      LOAD REGISTERS
+       BR    13
+       LTORG
+********************
+***BUILD STORAGE****
+********************
+BSAVE  DS      16F
+CARD   DS      80C
+INTER  DC      C' *'
+       END     MAIN
+356 45   2                    50
+66          77
+0          -45            98
+222        -789
+77
+87
+25
+-346     8
+100              543          -4
+88          92 51          57
+1234
